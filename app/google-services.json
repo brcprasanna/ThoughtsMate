@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "833106596661",
+    "firebase_url": "https://make-bharathi-app.firebaseio.com",
+    "project_id": "make-bharathi-app",
+    "storage_bucket": "make-bharathi-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833106596661:android:dd356ead2e2c5aa6",
+        "android_client_info": {
+          "package_name": "ram.king.com.makebharathi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833106596661-c1c8oqlu05amqufo9vhpq8nvdutvgv0s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ram.king.com.makebharathi",
+            "certificate_hash": "60d3bd77565acc7379c8f5171b2583bac44a17f5"
+          }
+        },
+        {
+          "client_id": "833106596661-ki3vrp0keergni5orce0va7lfkq3coqm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQrF6EmuIRFVpWGf9max2eQwjyevZAYlk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833106596661-ki3vrp0keergni5orce0va7lfkq3coqm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
