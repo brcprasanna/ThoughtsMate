@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -67,6 +68,9 @@ public class NewPostActivity extends BaseActivity {
 
     private Button mDedicationButton;
     private Button mCourtesyButton;
+    private Button mLanguageButton;
+
+    private LinearLayout mLangLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +111,10 @@ public class NewPostActivity extends BaseActivity {
 
         mDedicationButton = (Button) findViewById(R.id.button_dedication);
         mCourtesyButton = (Button) findViewById(R.id.button_courtesy);
+        mLanguageButton = (Button) findViewById(R.id.button_language);
+
+        mLangLayout = (LinearLayout) findViewById(R.id.lang_layout);
+
         mDedicationTextLayout = (TextInputLayout) findViewById(R.id.textLayoutDedicateTo);
         mCourtesyTextLayout = (TextInputLayout) findViewById(R.id.textLayoutCourtesy);
 
@@ -136,6 +144,20 @@ public class NewPostActivity extends BaseActivity {
                 else {
                     mCourtesyButton.setText(R.string.plus_courtesy);
                     mCourtesyTextLayout.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        mLanguageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mLanguageButton.getText().toString().startsWith("+")) {
+                    mLanguageButton.setText(R.string.minus_language);
+                    mLangLayout.setVisibility(View.VISIBLE);
+                }
+                else {
+                    mLanguageButton.setText(R.string.plus_language);
+                    mLangLayout.setVisibility(View.GONE);
                 }
             }
         });

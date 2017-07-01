@@ -82,6 +82,8 @@
     <string name="minus_dedication">- Dedication</string>
     <string name="plus_courtesy">+ Courtesy</string>
     <string name="minus_courtesy">- Courtesy</string>
+    <string name="plus_language">+ Language</string>
+    <string name="minus_language">- Language</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <color name="deep_purple">#4527A0</color>
