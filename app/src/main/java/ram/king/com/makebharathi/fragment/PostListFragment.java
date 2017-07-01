@@ -1,5 +1,6 @@
 package ram.king.com.makebharathi.fragment;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -212,24 +213,35 @@ public abstract class PostListFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
         EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(MessageEvent event) {
         setupAdapterWithQuery();
+        mAdapter.notifyDataSetChanged();
     };
 
     @Override
     public void onResume() {
         super.onResume();
-        //mAdapter.notifyDataSetChanged();
+
     }
 
     // [START post_stars_transaction]

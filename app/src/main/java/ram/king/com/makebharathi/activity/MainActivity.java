@@ -124,7 +124,7 @@ public class MainActivity extends BaseActivity {
         }
         else
             return super.onOptionsItemSelected(item);
-        }
+    }
 
     private void buildLangDialogList() {
 

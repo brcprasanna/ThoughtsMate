@@ -25,7 +25,8 @@
             </intent-filter>-->
         </activity>
         <activity android:name=".activity.NewPostActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize"></activity>
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:theme="@style/AppTheme"></activity>
         <intent-filter>
             <action android:name="android.intent.action.SEARCH" />
         </intent-filter>

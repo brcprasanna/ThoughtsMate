@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     tools:context="ram.king.com.makebharathi.activity.NewPostActivity">
 
-<!--
-    <ListView android:id="@android:id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
--->
+   <!--
+        <ListView android:id="@android:id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
+    -->
 <RelativeLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -52,15 +52,6 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="@string/plus_courtesy"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="16dp"/>
-
-    <Button
-        android:id="@+id/button_language"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="@string/plus_language"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="16dp"/>
@@ -129,37 +120,6 @@
         android:layout_marginRight="16dp"
         android:visibility="gone"/>
 
-
-    <LinearLayout
-        android:id="@+id/lang_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textLayoutCourtesy"
-        android:orientation="horizontal"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Choose Language"
-            android:textSize="20sp"/>
-
-
-    <Spinner
-        android:id="@+id/spinner_language"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/btn_dropdown"
-        android:layout_below="@id/field_courtesy"
-        android:spinnerMode="dialog"
-        />
-
-    </LinearLayout>
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textLayoutBody"
         android:layout_width="match_parent"
@@ -168,7 +128,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:layout_below="@id/lang_layout">
+        android:layout_below="@id/textLayoutCourtesy">
 
     <android.support.design.widget.TextInputEditText
         android:id="@+id/field_body"
@@ -181,13 +141,13 @@
         />
 </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_submit_post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_navigation_check_24"/>
+        android:src="@drawable/ic_navigation_check_24"/>-->
 </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>

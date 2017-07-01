@@ -1,19 +1,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity">
+    tools:context=".activity.NewPostActivity">
 
-    <item
-        android:id="@+id/action_logout"
-        android:title="@string/menu_logout"
-        android:visible="true"
-        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_choose_lang"
         android:icon="@drawable/ic_language_white_24dp"
         android:visible="true"
         android:title="Choose Language"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_send"
+        android:icon="@drawable/ic_action_send_now"
+        android:visible="true"
+        android:title="Send"
         app:showAsAction="ifRoom"/>
 
 </menu>
