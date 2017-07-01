@@ -15,6 +15,9 @@
         android:id="@+id/textLayoutTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginTop="16dp">
 
     <android.support.design.widget.TextInputEditText
@@ -24,23 +27,55 @@
         android:hint="Title" />
     </android.support.design.widget.TextInputLayout>
 
+    <LinearLayout
+        android:id="@+id/button_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/textLayoutTitle">
+    <Button
+        android:id="@+id/button_dedication"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/plus_dedication"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_below="@id/textLayoutTitle"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        />
+
+    <Button
+        android:id="@+id/button_courtesy"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/plus_courtesy"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_below="@id/textLayoutTitle"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"/>
+    </LinearLayout>
+
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textLayoutDedicateTo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
-
-
-    <android.support.design.widget.TextInputEditText
-        android:id="@+id/field_dedicated_to"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:hint="Dedicated to (Optional)"
-        android:layout_below="@+id/field_title"
+        android:layout_below="@id/button_layout"
+        android:visibility="gone">
+
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/field_dedicated_to"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Dedicated to"
         />
 
     </android.support.design.widget.TextInputLayout>
@@ -50,30 +85,28 @@
         android:id="@+id/users_list_view_dedication"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textLayoutTitle"
+        android:layout_below="@+id/textLayoutDedicateTo"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-
         android:visibility="gone"/>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textLayoutCourtesy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/textLayoutDedicateTo"
+        android:visibility="gone">
 
     <android.support.design.widget.TextInputEditText
         android:id="@+id/field_courtesy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:hint="Courtesy (if any )"
-        android:layout_below="@+id/field_dedicated_to"
+        android:hint="Courtesy"
          />
 
     </android.support.design.widget.TextInputLayout>
@@ -86,8 +119,6 @@
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-
         android:visibility="gone"/>
 
 
@@ -124,17 +155,17 @@
         android:id="@+id/textLayoutBody"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/lang_layout">
 
     <android.support.design.widget.TextInputEditText
         android:id="@+id/field_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/lang_layout"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="5dp"
         android:hint="Write your post..."
         android:inputType="textMultiLine"
         android:scrollHorizontally="false"

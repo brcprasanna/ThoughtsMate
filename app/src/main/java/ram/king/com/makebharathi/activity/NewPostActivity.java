@@ -3,6 +3,7 @@ package ram.king.com.makebharathi.activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -19,7 +21,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -44,8 +45,8 @@ public class NewPostActivity extends BaseActivity {
     // [END declare_database_ref]
 
     private TextInputEditText mTitleField;
-    private TextInputEditText mDedicatedTo;
-    private TextInputEditText mCourtesy;
+    private TextInputEditText mDedicatedToField;
+    private TextInputEditText mCourtesyField;
     private TextInputEditText mBodyField;
     private FloatingActionButton mSubmitButton;
 
@@ -61,6 +62,12 @@ public class NewPostActivity extends BaseActivity {
 
     Spinner mLanguageSpinner;
 
+    private TextInputLayout mDedicationTextLayout;
+    private TextInputLayout mCourtesyTextLayout;
+
+    private Button mDedicationButton;
+    private Button mCourtesyButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,8 +80,8 @@ public class NewPostActivity extends BaseActivity {
            @Override
            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                User user = (User) lvUsersForDedication.getItemAtPosition(i);
-               mDedicatedTo.setText(user.displayName);
-               mDedicatedTo.setSelection(mDedicatedTo.getText().length());
+               mDedicatedToField.setText(user.displayName);
+               mDedicatedToField.setSelection(mDedicatedToField.getText().length());
                lvUsersForDedication.setVisibility(View.GONE);
            }
         });
@@ -83,8 +90,8 @@ public class NewPostActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 User user = (User) lvUsersForCourtesy.getItemAtPosition(i);
-                mCourtesy.setText(user.displayName);
-                mCourtesy.setSelection(mCourtesy.getText().length());
+                mCourtesyField.setText(user.displayName);
+                mCourtesyField.setSelection(mCourtesyField.getText().length());
                 lvUsersForCourtesy.setVisibility(View.GONE);
             }
         });
@@ -93,10 +100,45 @@ public class NewPostActivity extends BaseActivity {
         // [END initialize_database_ref]
 
         mTitleField = (TextInputEditText) findViewById(R.id.field_title);
-        mDedicatedTo = (TextInputEditText) findViewById(R.id.field_dedicated_to);
-        mCourtesy = (TextInputEditText) findViewById(R.id.field_courtesy);
+        mDedicatedToField = (TextInputEditText) findViewById(R.id.field_dedicated_to);
+        mCourtesyField = (TextInputEditText) findViewById(R.id.field_courtesy);
         mBodyField = (TextInputEditText) findViewById(R.id.field_body);
         mSubmitButton = (FloatingActionButton) findViewById(R.id.fab_submit_post);
+
+        mDedicationButton = (Button) findViewById(R.id.button_dedication);
+        mCourtesyButton = (Button) findViewById(R.id.button_courtesy);
+        mDedicationTextLayout = (TextInputLayout) findViewById(R.id.textLayoutDedicateTo);
+        mCourtesyTextLayout = (TextInputLayout) findViewById(R.id.textLayoutCourtesy);
+
+        mDedicationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mDedicationButton.getText().toString().startsWith("+")) {
+                    mDedicationButton.setText(R.string.minus_dedication);
+                    mDedicationTextLayout.setVisibility(View.VISIBLE);
+                    mDedicatedToField.setText("");
+                }
+                else {
+                    mDedicationButton.setText(R.string.plus_dedication);
+                    mDedicationTextLayout.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        mCourtesyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mCourtesyButton.getText().toString().startsWith("+")) {
+                    mCourtesyButton.setText(R.string.minus_courtesy);
+                    mCourtesyTextLayout.setVisibility(View.VISIBLE);
+                    mCourtesyField.setText("");
+                }
+                else {
+                    mCourtesyButton.setText(R.string.plus_courtesy);
+                    mCourtesyTextLayout.setVisibility(View.GONE);
+                }
+            }
+        });
 
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,12 +147,13 @@ public class NewPostActivity extends BaseActivity {
             }
         });
 
+
         mLanguageSpinner= (Spinner)findViewById(R.id.spinner_language);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, AppConstants.languages);
         mLanguageSpinner.setAdapter(adapter);
         mLanguageSpinner.setSelection(21);
 
-        mDedicatedTo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mDedicatedToField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean isFocussed) {
                 if (!isFocussed)
@@ -118,7 +161,7 @@ public class NewPostActivity extends BaseActivity {
             }
         });
 
-        mCourtesy.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mCourtesyField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean isFocussed) {
                 if (!isFocussed)
@@ -126,12 +169,12 @@ public class NewPostActivity extends BaseActivity {
             }
         });
 
-        mDedicatedTo.addTextChangedListener(new TextWatcher() {
+        mDedicatedToField.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                 // When user changed the Text
-                if (cs.length() > 0 && usersListAdapterForDedicatedTo != null) {
+                if (cs.length() >= 3 && usersListAdapterForDedicatedTo != null) {
                     NewPostActivity.this.usersListAdapterForDedicatedTo.getFilter().filter(cs);
                     lvUsersForDedication.bringToFront();
                     lvUsersForDedication.setVisibility(View.VISIBLE);
@@ -153,39 +196,12 @@ public class NewPostActivity extends BaseActivity {
             }
         });
 
-        mDedicatedTo.addTextChangedListener(new TextWatcher() {
+        mCourtesyField.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                 // When user changed the Text
-                if (cs.length() > 0 && usersListAdapterForCourtesy != null) {
-                    NewPostActivity.this.usersListAdapterForCourtesy.getFilter().filter(cs);
-                    lvUsersForDedication.bringToFront();
-                    lvUsersForDedication.setVisibility(View.VISIBLE);
-                }
-                else
-                    lvUsersForDedication.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-                                          int arg3) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-                // TODO Auto-generated method stub
-            }
-        });
-
-        mCourtesy.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                // When user changed the Text
-                if (cs.length() > 0) {
+                if (cs.length() >= 3 && usersListAdapterForCourtesy != null) {
                     NewPostActivity.this.usersListAdapterForCourtesy.getFilter().filter(cs);
                     lvUsersForCourtesy.bringToFront();
                     lvUsersForCourtesy.setVisibility(View.VISIBLE);
@@ -248,8 +264,8 @@ public class NewPostActivity extends BaseActivity {
 
     private void submitPost() {
         final String title = mTitleField.getText().toString();
-        final String dedicatedTo = mDedicatedTo.getText().toString();
-        final String courtesy = mCourtesy.getText().toString();
+        final String dedicatedTo = mDedicatedToField.getText().toString();
+        final String courtesy = mCourtesyField.getText().toString();
         final String body = mBodyField.getText().toString();
         final String language = mLanguageSpinner.getSelectedItem().toString();
 
@@ -260,11 +276,11 @@ public class NewPostActivity extends BaseActivity {
         }
 
         if (TextUtils.isEmpty(dedicatedTo)) {
-            mDedicatedTo.setText("");
+            mDedicatedToField.setText("");
         }
 
         if (TextUtils.isEmpty(courtesy)) {
-            mCourtesy.setText("");
+            mCourtesyField.setText("");
         }
 
         // Body is required
