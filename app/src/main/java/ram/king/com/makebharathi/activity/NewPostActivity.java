@@ -39,12 +39,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.github.mthli.knife.KnifeText;
 import ram.king.com.makebharathi.R;
 import ram.king.com.makebharathi.adapter.CourtesyUsersAdapter;
 import ram.king.com.makebharathi.adapter.DedicatedToUsersAdapter;
 import ram.king.com.makebharathi.models.Post;
 import ram.king.com.makebharathi.models.User;
 import ram.king.com.makebharathi.util.AppConstants;
+import ram.king.com.makebharathi.util.AppUtil;
 import ram.king.com.makebharathi.util.MessageEvent;
 
 
@@ -60,7 +62,6 @@ public class NewPostActivity extends BaseActivity {
     private TextInputEditText mTitleField;
     private TextInputEditText mDedicatedToField;
     private TextInputEditText mCourtesyField;
-    private TextInputEditText mBodyField;
 
     FirebaseListAdapter<User> mAdapter;
     // List view
@@ -78,15 +79,13 @@ public class NewPostActivity extends BaseActivity {
     private Button mDedicationButton;
     private Button mCourtesyButton;
 
-    SharedPreferences sharedPref;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
 
-        getSupportActionBar().setTitle("New Thought");
+        String prefLanguage = AppUtil.getPreferredLanguage(this, AppConstants.PREFERRED_LANGUAGE, AppConstants.DEFAULT_LANGUAGE);
+        getSupportActionBar().setTitle("New Thought"+" "+"("+prefLanguage+")");
 
         lvUsersForDedication = (ListView) findViewById(R.id.users_list_view_dedication);
         lvUsersForCourtesy = (ListView) findViewById(R.id.users_list_view_courtesy);
@@ -117,7 +116,6 @@ public class NewPostActivity extends BaseActivity {
         mTitleField = (TextInputEditText) findViewById(R.id.field_title);
         mDedicatedToField = (TextInputEditText) findViewById(R.id.field_dedicated_to);
         mCourtesyField = (TextInputEditText) findViewById(R.id.field_courtesy);
-        mBodyField = (TextInputEditText) findViewById(R.id.field_body);
 
         mDedicationButton = (Button) findViewById(R.id.button_dedication);
         mCourtesyButton = (Button) findViewById(R.id.button_courtesy);
@@ -264,11 +262,76 @@ public class NewPostActivity extends BaseActivity {
         }
     }
 
-    private void submitPost() {
-        final String title = mTitleField.getText().toString();
-        final String dedicatedTo = mDedicatedToField.getText().toString();
-        final String courtesy = mCourtesyField.getText().toString();
-        final String body = mBodyField.getText().toString();
+    private void setEditingEnabled(boolean enabled) {
+        mTitleField.setEnabled(enabled);
+        /*if (enabled) {
+            mSubmitButton.setVisibility(View.VISIBLE);
+        } else {
+            mSubmitButton.setVisibility(View.GONE);
+        }*/
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_new_post, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int i = item.getItemId();
+        if (i == R.id.action_choose_lang) {
+            buildLangDialogList();
+            return true;
+        }else if (i == R.id.action_next)
+        {
+            proceedNext();
+            return true;
+        }
+        else
+            return super.onOptionsItemSelected(item);
+    }
+
+    private void buildLangDialogList() {
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(NewPostActivity.this);
+        builderSingle.setIcon(R.drawable.ic_language_black_24dp);
+        builderSingle.setTitle("Select a Language:-");
+
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(NewPostActivity.this, android.R.layout.select_dialog_singlechoice, AppConstants.languages);
+
+        int selectedIndex = Arrays.asList(AppConstants.languages).indexOf(AppUtil.getPreferredLanguage(this, AppConstants.PREFERRED_LANGUAGE, AppConstants.DEFAULT_LANGUAGE));
+        builderSingle.setSingleChoiceItems(AppConstants.languages,selectedIndex,null);
+
+        builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                String strName = arrayAdapter.getItem(which);
+                getSupportActionBar().setTitle("New Thought"+" "+"("+strName+")");
+
+                AlertDialog.Builder builderInner = new AlertDialog.Builder(NewPostActivity.this);
+                //builderInner.setMessage(strName);
+                AppUtil.putString(NewPostActivity.this, AppConstants.PREFERRED_LANGUAGE,strName);
+                EventBus.getDefault().post(new MessageEvent("Changed"));
+                dialog.dismiss();
+            }
+        });
+        builderSingle.show();
+    }
+
+    public void proceedNext() {
+        //sending values
+        final String title = mTitleField.getText().toString().trim();
+        final String dedicatedTo = mDedicatedToField.getText().toString().trim();
+        final String courtesy = mCourtesyField.getText().toString().trim();
 
         // Title is required
         if (TextUtils.isEmpty(title)) {
@@ -284,146 +347,30 @@ public class NewPostActivity extends BaseActivity {
             mCourtesyField.setText("");
         }
 
-        // Body is required
-        if (TextUtils.isEmpty(body)) {
-            mBodyField.setError(REQUIRED);
-            return;
-        }
-
         // Disable button so there are no multi-posts
-        setEditingEnabled(false);
-        Toast.makeText(this, "Posting...", Toast.LENGTH_SHORT).show();
+        //setEditingEnabled(false);
 
-        // [START single_value_read]
-        final String userId = getUid();
-        mDatabase.child("users").child(userId).addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // Get user value
-                        User user = dataSnapshot.getValue(User.class);
+        Intent intent = new Intent(NewPostActivity.this,
+                TextEditorActivity.class);
+        intent.putExtra("title", title);
+        intent.putExtra("dedicated_to", dedicatedTo);
+        intent.putExtra("courtesy", courtesy);
 
-                        // [START_EXCLUDE]
-                        if (user == null) {
-                            // User is null, error out
-                            Log.e(TAG, "User " + userId + " is unexpectedly null");
-                            Toast.makeText(NewPostActivity.this,
-                                    "Error: could not fetch user.",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            // Write new post
-                            writeNewPost(userId, user.displayName, title, body,user.photoUrl, dedicatedTo, courtesy);
-                        }
-
-                        // Finish this Activity, back to the stream
-                        setEditingEnabled(true);
-                        finish();
-                        // [END_EXCLUDE]
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
-                        // [START_EXCLUDE]
-                        setEditingEnabled(true);
-                        // [END_EXCLUDE]
-                    }
-                });
-        // [END single_value_read]
+        startActivityForResult(intent, AppConstants.SAVE_WRITE_POST);
     }
 
-    private void setEditingEnabled(boolean enabled) {
-        mTitleField.setEnabled(enabled);
-        mBodyField.setEnabled(enabled);
-        /*if (enabled) {
-            mSubmitButton.setVisibility(View.VISIBLE);
-        } else {
-            mSubmitButton.setVisibility(View.GONE);
-        }*/
-    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == AppConstants.SAVE_WRITE_POST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                finish();
+                //mBodyField.fromHtml(data.getExtras().get("content").toString());
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
 
-    // [START write_fan_out]
-    private void writeNewPost(String userId, String displayName, String title, String body, String photoUrl, String dedicatedTo, String courtesy) {
-        // Create new post at /user-posts/$userid/$postid and at
-        // /posts/$postid simultaneously
-        sharedPref = getSharedPreferences(
-                getString(R.string.preference_file), Context.MODE_PRIVATE);
-        String preferredLanguage = sharedPref.getString(AppConstants.PREFERRED_LANGUAGE,AppConstants.DEFAULT_LANGUAGE);
-
-
-        String key = mDatabase.child("posts").push().getKey();
-        Post post = new Post(userId, displayName, title, body, photoUrl, dedicatedTo, courtesy, preferredLanguage);
-        Map<String, Object> postValues = post.toMap();
-
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/posts/" + key, postValues);
-        childUpdates.put("/user-posts/" + userId + "/" + key, postValues);
-
-        mDatabase.updateChildren(childUpdates);
-    }
-    // [END write_fan_out]
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_new_post, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int i = item.getItemId();
-        if (i == R.id.action_send) {
-            submitPost();
-            return true;
-        } else if (i == R.id.action_choose_lang) {
-            buildLangDialogList();
-            return true;
+                // Do something with the contact here (bigger example below)
+            }
         }
-        else
-            return super.onOptionsItemSelected(item);
-    }
-
-    private void buildLangDialogList() {
-
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(NewPostActivity.this);
-        builderSingle.setIcon(R.drawable.ic_language_black_24dp);
-        builderSingle.setTitle("Select a Language:-");
-
-
-
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(NewPostActivity.this, android.R.layout.select_dialog_singlechoice, AppConstants.languages);
-
-        sharedPref = getSharedPreferences(
-                getString(R.string.preference_file), Context.MODE_PRIVATE);
-        String preferredLanguage = sharedPref.getString(AppConstants.PREFERRED_LANGUAGE,AppConstants.DEFAULT_LANGUAGE);
-
-        int selectedIndex = Arrays.asList(AppConstants.languages).indexOf(preferredLanguage);
-        builderSingle.setSingleChoiceItems(AppConstants.languages,selectedIndex,null);
-
-        builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                sharedPref = getSharedPreferences(
-                        getString(R.string.preference_file), Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-
-                String strName = arrayAdapter.getItem(which);
-                AlertDialog.Builder builderInner = new AlertDialog.Builder(NewPostActivity.this);
-                //builderInner.setMessage(strName);
-                editor.putString(AppConstants.PREFERRED_LANGUAGE, strName);
-                editor.commit();
-
-                EventBus.getDefault().post(new MessageEvent("Changed"));
-                dialog.dismiss();
-            }
-        });
-        builderSingle.show();
     }
 }

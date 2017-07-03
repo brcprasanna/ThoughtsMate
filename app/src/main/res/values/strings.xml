@@ -85,6 +85,8 @@
     <string name="plus_language">+ Language</string>
     <string name="minus_language">- Language</string>
 
+    <string name="write_your_post">Write your post</string>
+
 <!-- TODO: Remove or change this placeholder text -->
     <color name="deep_purple">#4527A0</color>
 
@@ -110,5 +112,27 @@
 
 <string name ="delete_header">Delete!</string>
 <string name ="delete_message">Are you sre you want to delete?</string>
+
+
+    <!-- Menu -->
+    <string name="menu_undo">Undo</string>
+    <string name="menu_redo">Redo</string>
+    <string name="menu_save">Save</string>
+
+    <!-- Dialog -->
+    <string name="dialog_title">Insert link</string>
+    <string name="dialog_edit_hint">http(s)://</string>
+    <string name="dialog_button_ok">OK</string>
+    <string name="dialog_button_cancel">Cancel</string>
+
+    <!-- Toast -->
+    <string name="toast_bold">Bold</string>
+    <string name="toast_italic">Italic</string>
+    <string name="toast_underline">Underline</string>
+    <string name="toast_strikethrough">Strikethrough</string>
+    <string name="toast_bullet">Bullet</string>
+    <string name="toast_quote">Quote</string>
+    <string name="toast_insert_link">Insert link</string>
+    <string name="toast_format_clear">Format clear</string>
 
 </resources>

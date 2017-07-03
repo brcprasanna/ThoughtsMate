@@ -44,9 +44,16 @@
                  <category android:name="android.intent.category.LAUNCHER" />
              </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activity.TextEditorActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:theme="@style/MainActivityTheme">
+        </activity>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="dae2e4b0b7ef3e71878b4e6cd1d8aa40b7641eca"
+
             />
 
     </application>

@@ -6,6 +6,8 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>-->
 
+    <style name="MainActivityTheme" parent="android:Theme.DeviceDefault" />
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

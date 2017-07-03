@@ -16,4 +16,5 @@ public class AppConstants {
     };
     public static final String PREFERRED_LANGUAGE = "PREFERRED_LANGUAGE";
     public static final String DEFAULT_LANGUAGE = "English";
+    public static final int SAVE_WRITE_POST = 105 ;
 }

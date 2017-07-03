@@ -45,6 +45,7 @@ import ram.king.com.makebharathi.fragment.MyPostsFragment;
 import ram.king.com.makebharathi.fragment.MyFavouritesFragment;
 import ram.king.com.makebharathi.fragment.RecentPostsFragment;
 import ram.king.com.makebharathi.util.AppConstants;
+import ram.king.com.makebharathi.util.AppUtil;
 import ram.king.com.makebharathi.util.MessageEvent;
 
 public class MainActivity extends BaseActivity {
@@ -53,8 +54,6 @@ public class MainActivity extends BaseActivity {
 
     private FragmentPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
-
-    SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,11 +135,7 @@ public class MainActivity extends BaseActivity {
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.select_dialog_singlechoice, AppConstants.languages);
 
-        sharedPref = getSharedPreferences(
-                getString(R.string.preference_file), Context.MODE_PRIVATE);
-        String preferredLanguage = sharedPref.getString(AppConstants.PREFERRED_LANGUAGE,AppConstants.DEFAULT_LANGUAGE);
-
-        int selectedIndex = Arrays.asList(AppConstants.languages).indexOf(preferredLanguage);
+        int selectedIndex = Arrays.asList(AppConstants.languages).indexOf(AppUtil.getPreferredLanguage(this,AppConstants.PREFERRED_LANGUAGE,AppConstants.DEFAULT_LANGUAGE));
         builderSingle.setSingleChoiceItems(AppConstants.languages,selectedIndex,null);
 
         builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -153,16 +148,10 @@ public class MainActivity extends BaseActivity {
         builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                sharedPref = getSharedPreferences(
-                        getString(R.string.preference_file), Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-
                 String strName = arrayAdapter.getItem(which);
                 AlertDialog.Builder builderInner = new AlertDialog.Builder(MainActivity.this);
                 //builderInner.setMessage(strName);
-                editor.putString(AppConstants.PREFERRED_LANGUAGE, strName);
-                editor.commit();
-
+                AppUtil.putString(MainActivity.this,AppConstants.PREFERRED_LANGUAGE,strName);
                 EventBus.getDefault().post(new MessageEvent("Changed"));
                 dialog.dismiss();
             }

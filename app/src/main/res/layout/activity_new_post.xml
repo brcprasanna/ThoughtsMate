@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="ram.king.com.makebharathi.activity.NewPostActivity">
 
    <!--
@@ -120,34 +121,5 @@
         android:layout_marginRight="16dp"
         android:visibility="gone"/>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/textLayoutBody"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_below="@id/textLayoutCourtesy">
-
-    <android.support.design.widget.TextInputEditText
-        android:id="@+id/field_body"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/lang_layout"
-        android:hint="Write your post..."
-        android:inputType="textMultiLine"
-        android:scrollHorizontally="false"
-        />
-</android.support.design.widget.TextInputLayout>
-
-    <!--<android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_submit_post"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_navigation_check_24"/>-->
 </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>

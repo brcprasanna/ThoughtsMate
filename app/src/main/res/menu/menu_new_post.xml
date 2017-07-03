@@ -12,10 +12,9 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/action_send"
-        android:icon="@drawable/ic_action_send_now"
+        android:id="@+id/action_next"
         android:visible="true"
-        android:title="Send"
-        app:showAsAction="ifRoom"/>
+        android:title="Next"
+        app:showAsAction="always"/>
 
 </menu>
