@@ -11,12 +11,11 @@ import ram.king.com.makebharathi.R;
 public class AppUtil {
 
 
-    public static boolean isInternetConnected(Context theActivity){
-        boolean connected;
-        ConnectivityManager connectivityManager = (ConnectivityManager)theActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        connected = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED;
-        return connected;
+    public static boolean isInternetConnected(Context activity) {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
     public static String getPreferredLanguage(Context context, String key, String defaultVal)

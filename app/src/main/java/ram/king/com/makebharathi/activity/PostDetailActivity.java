@@ -421,6 +421,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
             Glide.with(PostDetailActivity.this).load(comment.photoUrl)
                     .into(holder.authorPhoto);
 
+
         }
 
         @Override

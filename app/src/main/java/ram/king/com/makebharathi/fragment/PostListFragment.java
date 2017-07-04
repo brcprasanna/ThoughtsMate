@@ -222,7 +222,7 @@ public abstract class PostListFragment extends BaseFragment {
         };
 
         //come here
-        //https://sta=ckoverflow.com/questions/35506347/loading-view-before-data-is-loaded-into-recycler-view
+        //https://stackoverflow.com/questions/35506347/loading-view-before-data-is-loaded-into-recycler-view
         //https://firebase.google.com/docs/database/android/offline-capabilities
 
 /*

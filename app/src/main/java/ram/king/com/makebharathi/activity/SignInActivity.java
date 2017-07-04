@@ -1,9 +1,11 @@
 package ram.king.com.makebharathi.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import ram.king.com.makebharathi.R;
 import ram.king.com.makebharathi.models.User;
+import ram.king.com.makebharathi.util.AppUtil;
 
 public class SignInActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
@@ -211,7 +214,21 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         int i = v.getId();
         if (i == R.id.button_gmail_sign_in)
         {
-            gmailSignIn();
+            if (AppUtil.isInternetConnected(this))
+                gmailSignIn();
+            else
+            {
+                new AlertDialog.Builder(this)
+                        .setTitle(getResources().getString(R.string.no_internet_header))
+                        .setMessage(getResources().getString(R.string.no_internet_message))
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+            }
         }
 
     }

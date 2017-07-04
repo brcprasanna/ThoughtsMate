@@ -111,7 +111,10 @@
 <string name="heading_my_favourites">My Favourites</string>
 
 <string name ="delete_header">Delete!</string>
-<string name ="delete_message">Are you sre you want to delete?</string>
+<string name ="delete_message">Are you sure you want to delete?</string>
+
+<string name ="no_internet_header">No Internet</string>
+<string name ="no_internet_message">Please connect to Internet and try again</string>
 
 
     <!-- Menu -->
