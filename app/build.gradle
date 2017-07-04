@@ -64,6 +64,7 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC1'
     compile 'com.github.mthli:Knife:v1.1'
+    compile 'at.blogc:expandabletextview:1.0.3'
 
 }
 

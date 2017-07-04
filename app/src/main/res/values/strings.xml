@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Thoughts Mate</string>
+    <string name="app_name">ThoughtsMate</string>
 
     <string name="preference_file">PreferenceFile</string>
 

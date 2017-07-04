@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,9 +26,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import at.blogc.android.views.ExpandableTextView;
 import ram.king.com.makebharathi.R;
 import ram.king.com.makebharathi.models.Comment;
 import ram.king.com.makebharathi.models.Post;
@@ -48,10 +53,16 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     private CircularImageView mAuthorPhoto;
     private TextView mAuthorView;
     private TextView mTitleView;
-    private TextView mBodyView;
+    private ExpandableTextView mBodyView;
+    private TextView mDateView;
+    private TextView mDedicatedToView;
+    private TextView mCourtesyView;
+
     private TextInputEditText mCommentField;
     private Button mCommentButton;
     private RecyclerView mCommentsRecycler;
+
+    PrettyTime prettyTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +85,13 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         mAuthorPhoto = (CircularImageView) findViewById(R.id.post_author_photo);
         mAuthorView = (TextView) findViewById(R.id.post_author);
         mTitleView = (TextView) findViewById(R.id.post_title);
-        mBodyView = (TextView) findViewById(R.id.post_body);
+        mBodyView = (ExpandableTextView) findViewById(R.id.post_body);
+        mDateView = (TextView) findViewById(R.id.post_date);
+        mDedicatedToView = (TextView) findViewById(R.id.post_dedicated_to);
+        mCourtesyView= (TextView) findViewById(R.id.post_courtesy);
+
+        //mTitleView.setVisibility(View.GONE);
+
         mCommentField = (TextInputEditText) findViewById(R.id.field_comment_text);
         mCommentButton = (Button) findViewById(R.id.button_post_comment);
         mCommentsRecycler = (RecyclerView) findViewById(R.id.recycler_comments);
@@ -82,6 +99,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         mCommentButton.setOnClickListener(this);
         mCommentsRecycler.setLayoutManager(new LinearLayoutManager(this));
 
+        prettyTime = new PrettyTime();
     }
 
     @Override
@@ -95,29 +113,110 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
                 Post post = dataSnapshot.getValue(Post.class);
-                // [START_EXCLUDE]
                 Glide.with(PostDetailActivity.this).load(post.photoUrl)
                         .into(mAuthorPhoto);
 
+                getSupportActionBar().setTitle(post.title);
+
                 mAuthorView.setText(post.author);
                 mTitleView.setText(post.title);
+                if (!TextUtils.isEmpty(post.dedicatedTo)) {
+                    mDedicatedToView.setVisibility(View.VISIBLE);
+                    mDedicatedToView.setText("Dedicated To : " + post.dedicatedTo);
+                }
+                else {
+                    mDedicatedToView.setVisibility(View.GONE);
+                }
+                if (!TextUtils.isEmpty(post.courtesy)) {
+                    mCourtesyView.setVisibility(View.VISIBLE);
+                    mCourtesyView.setText("Courtesy : " + post.courtesy);
+                }
+                else {
+                    mCourtesyView.setVisibility(View.GONE);
+                }
+
                 mBodyView.setText(post.body);
-                // [END_EXCLUDE]
+
+
+                long yourmilliseconds = (long) post.timestamp;
+                if (prettyTime != null)
+                    mDateView.setText(prettyTime.format(new Date(yourmilliseconds)));
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Getting Post failed, log a message
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // [START_EXCLUDE]
                 Toast.makeText(PostDetailActivity.this, "Failed to load post.",
                         Toast.LENGTH_SHORT).show();
-                // [END_EXCLUDE]
             }
         };
-        mPostReference.addValueEventListener(postListener);
-        // [END post_value_event_listener]
 
+
+        final Button buttonToggle = (Button) this.findViewById(R.id.button_toggle);
+        buttonToggle.setVisibility(View.VISIBLE);
+        buttonToggle.setBackgroundResource(R.drawable.ic_expand_more);
+// set animation duration via code, but preferable in your layout files by using the animation_duration attribute
+        mBodyView.setAnimationDuration(1000L);
+
+        // set interpolators for both expanding and collapsing animations
+        mBodyView.setInterpolator(new OvershootInterpolator());
+
+// or set them separately
+        mBodyView.setExpandInterpolator(new OvershootInterpolator());
+        mBodyView.setCollapseInterpolator(new OvershootInterpolator());
+
+// toggle the mBodyView
+        buttonToggle.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(final View v)
+            {
+                mBodyView.toggle();
+                buttonToggle.setText(mBodyView.isExpanded() ? "Collapse" : "Expand");
+            }
+        });
+
+// but, you can also do the checks yourself
+        buttonToggle.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(final View v)
+            {
+                if (mBodyView.isExpanded())
+                {
+                    buttonToggle.setBackgroundResource(R.drawable.ic_expand_more);
+                    mBodyView.collapse();
+                }
+                else
+                {
+                    buttonToggle.setBackgroundResource(R.drawable.ic_expand_less);
+                    mBodyView.expand();
+                    if (mBodyView.getLineCount() <= 5)
+                        buttonToggle.setVisibility(View.GONE);
+
+                }
+            }
+        });
+
+// listen for expand / collapse events
+        mBodyView.setOnExpandListener(new ExpandableTextView.OnExpandListener()
+        {
+            @Override
+            public void onExpand(final ExpandableTextView view)
+            {
+                Log.d(TAG, "ExpandableTextView expanded");
+            }
+
+            @Override
+            public void onCollapse(final ExpandableTextView view)
+            {
+                Log.d(TAG, "ExpandableTextView collapsed");
+            }
+        });
+
+        mPostReference.addValueEventListener(postListener);
         // Keep copy of post listener so we can remove it when app stops
         mPostListener = postListener;
 

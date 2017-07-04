@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:maxLines="2"
         android:textStyle="bold"
         android:textColor="@color/black"
         tools:text="My First Post" />
@@ -23,9 +23,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
+        android:textSize="14sp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textStyle="italic"
+        android:textStyle="italic|bold"
         android:layout_marginTop="5dp"
         tools:text="Dedicated To" />
 
@@ -36,20 +37,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
+        android:textSize="14sp"
         android:maxLines="1"
-        android:textStyle="italic"
-        android:layout_marginTop="5dp"
+        android:textStyle="italic|bold"
+        android:layout_marginBottom="5dp"
         android:textColor="@color/black"
 
         tools:text="Courtesy" />
 
-    <TextView
-        android:id="@+id/post_body"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:maxLines="10"
-        android:textColor="@color/black"
-        tools:text="@string/lorem" />
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toggleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <at.blogc.android.views.ExpandableTextView
+            android:id="@+id/post_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lorem"
+            android:maxLines="5"
+            android:ellipsize="end"
+            app:animation_duration="1000"/>
+
+        <!-- Optional parameter animation_duration: sets the duration of the expand animation -->
+
+        <Button
+            android:id="@+id/button_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            style="@style/Widget.AppCompat.Button.Colored"/>
+
+    </LinearLayout>
 
 </LinearLayout>

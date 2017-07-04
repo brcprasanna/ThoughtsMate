@@ -7,7 +7,9 @@ import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
@@ -51,7 +53,10 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         dedicatedTo = (TextView) itemView.findViewById(R.id.post_dedicated_to);
         courtesy = (TextView) itemView.findViewById(R.id.post_courtesy);
         commentView = (ImageView) itemView.findViewById(R.id.comment);
+
         p = new PrettyTime();
+
+        titleView.setMaxLines(1);
     }
 
     public void bindToPost(Post post, View.OnClickListener starClickListener,
