@@ -11,11 +11,11 @@ public class MyFavouritesFragment extends PostListFragment {
     public Query getQuery(DatabaseReference databaseReference) {
         // [START my_top_posts_query]
         // My top posts by number of stars
-        showProgressDialog();
+        //showProgressDialog();
         String myUserId = getUid();
         Query myTopPostsQuery = databaseReference.child("star-user-posts").child(myUserId);
         // [END my_top_posts_query]
-        hideProgressDialog();
+        //hideProgressDialog();
         return myTopPostsQuery;
     }
 }

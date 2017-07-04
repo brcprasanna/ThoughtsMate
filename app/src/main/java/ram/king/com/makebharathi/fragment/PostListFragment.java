@@ -1,5 +1,6 @@
 package ram.king.com.makebharathi.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -59,6 +62,8 @@ public abstract class PostListFragment extends BaseFragment {
     private RecyclerView mRecycler;
     private LinearLayoutManager mManager;
 
+    private ProgressBar mProgressBar;
+
     private List<String> mCommentIds = new ArrayList<>();
     private List<Comment> mComments = new ArrayList<>();
     public PostListFragment() {}
@@ -76,6 +81,7 @@ public abstract class PostListFragment extends BaseFragment {
         mRecycler = (RecyclerView) rootView.findViewById(R.id.messages_list);
         mRecycler.setHasFixedSize(true);
 
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
         return rootView;
     }
 
@@ -139,6 +145,7 @@ public abstract class PostListFragment extends BaseFragment {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 //ToDo Need to create a separate model for this
+                                //may be come here
                                 Comment comment = dataSnapshot.getValue(Comment.class);
                                 if (comment == null)
                                     viewHolder.commentView.setVisibility(View.GONE);
@@ -206,7 +213,29 @@ public abstract class PostListFragment extends BaseFragment {
                 });
             }
 
+            @Override
+            protected void onDataChanged() {
+                super.onDataChanged();
+                mProgressBar.setVisibility(View.GONE);
+                mRecycler.setVisibility(View.VISIBLE);
+            }
         };
+
+        //come here
+        //https://sta=ckoverflow.com/questions/35506347/loading-view-before-data-is-loaded-into-recycler-view
+        //https://firebase.google.com/docs/database/android/offline-capabilities
+
+/*
+        mRecycler.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                //mProgressBar.setVisibility(View.GONE);
+
+            }
+
+        });
+*/
+
         mRecycler.setAdapter(mAdapter);
     }
 

@@ -10,9 +10,9 @@ public class MyPostsFragment extends PostListFragment {
     @Override
     public Query getQuery(DatabaseReference databaseReference) {
         // All my posts
-        showProgressDialog();
+        //showProgressDialog();
         Query myPostsQuery = databaseReference.child("user-posts").child(getUid());
-        hideProgressDialog();
+        //hideProgressDialog();
         return myPostsQuery;
     }
 }

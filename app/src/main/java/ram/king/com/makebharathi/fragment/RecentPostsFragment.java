@@ -23,12 +23,12 @@ public class RecentPostsFragment extends PostListFragment {
         // [START recent_posts_query]
         // Last 100 posts, these are automatically the 100 most recent
         // due to sorting by push() keys
-        showProgressDialog();
+        //showProgressDialog();
         SharedPreferences sharedPref = activity.getSharedPreferences(
                 getString(R.string.preference_file), Context.MODE_PRIVATE);
         String preferredLanguage = sharedPref.getString(AppConstants.PREFERRED_LANGUAGE,AppConstants.DEFAULT_LANGUAGE);
         Query recentPostsQuery = databaseReference.child("posts").orderByChild("language").equalTo(preferredLanguage);
-        hideProgressDialog();
+        //hideProgressDialog();
         return recentPostsQuery;
     }
 }

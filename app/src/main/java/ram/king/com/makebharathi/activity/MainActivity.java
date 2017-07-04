@@ -60,6 +60,10 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        String prefLanguage = AppUtil.getPreferredLanguage(this, AppConstants.PREFERRED_LANGUAGE, AppConstants.DEFAULT_LANGUAGE);
+        getSupportActionBar().setTitle(getResources().getString(R.string.app_name)+" "+"("+prefLanguage+")");
+
+
         // Create the adapter that will return a fragment for each section
         mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             private final Fragment[] mFragments = new Fragment[] {
@@ -149,6 +153,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String strName = arrayAdapter.getItem(which);
+                getSupportActionBar().setTitle(getResources().getString(R.string.app_name)+" "+"("+strName+")");
+
                 AlertDialog.Builder builderInner = new AlertDialog.Builder(MainActivity.this);
                 //builderInner.setMessage(strName);
                 AppUtil.putString(MainActivity.this,AppConstants.PREFERRED_LANGUAGE,strName);
