@@ -263,8 +263,14 @@ public abstract class PostListFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(MessageEvent event) {
-        setupAdapterWithQuery();
-        mAdapter.notifyDataSetChanged();
+        if(event.getMessage().equals("changed")) {
+            setupAdapterWithQuery();
+            mAdapter.notifyDataSetChanged();
+        }
+        else if (event.getMessage().equals("refresh"))
+        {
+            mManager.scrollToPositionWithOffset(mAdapter.getItemCount(), 0);
+        }
     };
 
     @Override

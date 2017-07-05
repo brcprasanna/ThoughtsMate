@@ -22,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +33,7 @@ import ram.king.com.makebharathi.models.Post;
 import ram.king.com.makebharathi.models.User;
 import ram.king.com.makebharathi.util.AppConstants;
 import ram.king.com.makebharathi.util.AppUtil;
+import ram.king.com.makebharathi.util.MessageEvent;
 
 
 public class TextEditorActivity extends Activity {
@@ -322,6 +325,7 @@ public class TextEditorActivity extends Activity {
                             writeNewPost(userId, user.displayName, mTitle, mBody,user.photoUrl, mDedicatedTo, mCourtesy);
                         }
                         setResult(RESULT_OK);
+                        EventBus.getDefault().post(new MessageEvent("refresh"));
                         finish();
                     }
 

@@ -320,7 +320,7 @@ public class NewPostActivity extends BaseActivity {
                 AlertDialog.Builder builderInner = new AlertDialog.Builder(NewPostActivity.this);
                 //builderInner.setMessage(strName);
                 AppUtil.putString(NewPostActivity.this, AppConstants.PREFERRED_LANGUAGE,strName);
-                EventBus.getDefault().post(new MessageEvent("Changed"));
+                EventBus.getDefault().post(new MessageEvent("changed"));
                 dialog.dismiss();
             }
         });

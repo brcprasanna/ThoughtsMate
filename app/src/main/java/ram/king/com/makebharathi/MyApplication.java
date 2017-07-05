@@ -18,7 +18,7 @@ public class MyApplication extends Application {
         super.onCreate();
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         mRootRef = FirebaseDatabase.getInstance().getReference();
-        mConditionRef = mRootRef.child("condition");
+            mConditionRef = mRootRef.child("condition");
 
         Fabric.with(this, new Crashlytics());
 

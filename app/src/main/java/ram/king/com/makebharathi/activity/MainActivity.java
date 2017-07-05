@@ -158,7 +158,7 @@ public class MainActivity extends BaseActivity {
                 AlertDialog.Builder builderInner = new AlertDialog.Builder(MainActivity.this);
                 //builderInner.setMessage(strName);
                 AppUtil.putString(MainActivity.this,AppConstants.PREFERRED_LANGUAGE,strName);
-                EventBus.getDefault().post(new MessageEvent("Changed"));
+                EventBus.getDefault().post(new MessageEvent("changed"));
                 dialog.dismiss();
             }
         });
