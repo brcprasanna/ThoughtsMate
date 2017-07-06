@@ -125,7 +125,7 @@ public abstract class PostListFragment extends BaseFragment {
                 if (model.stars.containsKey(getUid())) {
                     viewHolder.starView.setImageResource(R.drawable.ic_favorite_black_24dp);
                 } else {
-                    viewHolder.starView.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    viewHolder.starView.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                 }
 /*
                 Glide.with(activity).load(model.photoUrl)

@@ -66,6 +66,9 @@ dependencies {
     compile 'com.github.mthli:Knife:v1.1'
     compile 'at.blogc:expandabletextview:1.0.3'
 
-}
+        compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+
+
+    }
 
 apply plugin: 'com.google.gms.google-services'
