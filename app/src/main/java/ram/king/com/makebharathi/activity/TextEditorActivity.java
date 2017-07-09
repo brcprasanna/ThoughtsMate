@@ -3,8 +3,6 @@ package ram.king.com.makebharathi.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -63,7 +61,7 @@ public class TextEditorActivity extends Activity {
         mDedicatedTo = getIntent().getExtras().get("dedicated_to").toString();
         mCourtesy = getIntent().getExtras().get("courtesy").toString();
 
-        getActionBar().setTitle("Write your post...");
+        getActionBar().setTitle("Compose");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -340,7 +338,7 @@ public class TextEditorActivity extends Activity {
         // Create new post at /user-posts/$userid/$postid and at
         // /posts/$postid simultaneously
         String key = mDatabase.child("posts").push().getKey();
-        Post post = new Post(userId, displayName, title, body, photoUrl, dedicatedTo, courtesy, AppUtil.getPreferredLanguage(this, AppConstants.PREFERRED_LANGUAGE, AppConstants.DEFAULT_LANGUAGE));
+        Post post = new Post(userId, displayName, title, body, photoUrl, dedicatedTo, courtesy, AppUtil.getString(this, AppConstants.PREFERRED_LANGUAGE, AppConstants.DEFAULT_LANGUAGE));
         Map<String, Object> postValues = post.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();

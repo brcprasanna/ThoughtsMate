@@ -23,6 +23,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -66,8 +70,8 @@ dependencies {
     compile 'com.github.mthli:Knife:v1.1'
     compile 'at.blogc:expandabletextview:1.0.3'
 
-        compile 'com.facebook.android:facebook-android-sdk:[4,5)'
-
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    compile 'com.github.apl-devs:appintro:v4.2.0'
 
     }
 

@@ -17,4 +17,18 @@ public class AppConstants {
     public static final String PREFERRED_LANGUAGE = "PREFERRED_LANGUAGE";
     public static final String DEFAULT_LANGUAGE = "English";
     public static final int SAVE_WRITE_POST = 105 ;
+
+    public static final String FIRST_TIME_LOGIN = "FIRST_TIME_LOGIN";
+
+    public static final String SLIDE1_TITLE = "Unleash your limitless thoughts!!!";
+    public static final String SLIDE2_TITLE = "Dedicate to your loved one!!!";
+    public static final String SLIDE3_TITLE = "Post and watch thoughts on your favourite language!!!";
+
+    public static final String SLIDE1_DESC = "Begin your writing journey right here. Post innovative poems, stories, ideas and thoughts, get likes, comments from other ThoughtMates";
+    public static final String SLIDE2_DESC = "You can dedicate your thoughts to your loved one and use the add courtesy option if is not not your thought or a copyrighted one";
+    public static final String SLIDE3_DESC = "Filter the thoughts based on your selected language and post your thoughts on your native languages";
+
+
+
+
 }

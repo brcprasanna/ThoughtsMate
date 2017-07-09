@@ -17,10 +17,8 @@
 package ram.king.com.makebharathi.activity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -30,13 +28,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Arrays;
 
@@ -60,7 +55,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String prefLanguage = AppUtil.getPreferredLanguage(this, AppConstants.PREFERRED_LANGUAGE, AppConstants.DEFAULT_LANGUAGE);
+        String prefLanguage = AppUtil.getString(this, AppConstants.PREFERRED_LANGUAGE, AppConstants.DEFAULT_LANGUAGE);
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name)+" "+"("+prefLanguage+")");
 
 
@@ -139,7 +134,7 @@ public class MainActivity extends BaseActivity {
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.select_dialog_singlechoice, AppConstants.languages);
 
-        int selectedIndex = Arrays.asList(AppConstants.languages).indexOf(AppUtil.getPreferredLanguage(this,AppConstants.PREFERRED_LANGUAGE,AppConstants.DEFAULT_LANGUAGE));
+        int selectedIndex = Arrays.asList(AppConstants.languages).indexOf(AppUtil.getString(this,AppConstants.PREFERRED_LANGUAGE,AppConstants.DEFAULT_LANGUAGE));
         builderSingle.setSingleChoiceItems(AppConstants.languages,selectedIndex,null);
 
         builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

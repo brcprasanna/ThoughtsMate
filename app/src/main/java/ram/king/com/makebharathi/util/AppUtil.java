@@ -18,7 +18,7 @@ public class AppUtil {
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
-    public static String getPreferredLanguage(Context context, String key, String defaultVal)
+    public static String getString(Context context, String key, String defaultVal)
     {
         SharedPreferences sharedPref;
 
@@ -34,6 +34,26 @@ public class AppUtil {
                 context.getString(R.string.preference_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(key, value);
+        editor.commit();
+
+    }
+
+    public static boolean getBoolean(Context context, String key, boolean defaultVal)
+    {
+        SharedPreferences sharedPref;
+
+        sharedPref = context.getSharedPreferences(
+                context.getString(R.string.preference_file), Context.MODE_PRIVATE);
+        return sharedPref.getBoolean(key,defaultVal);
+
+    }
+
+    public static void putBoolean(Context context,String key, boolean value) {
+        SharedPreferences sharedPref;
+        sharedPref = context.getSharedPreferences(
+                context.getString(R.string.preference_file), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(key, value);
         editor.commit();
 
     }

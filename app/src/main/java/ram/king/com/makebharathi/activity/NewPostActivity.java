@@ -1,31 +1,23 @@
 package ram.king.com.makebharathi.activity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,14 +28,11 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
-import io.github.mthli.knife.KnifeText;
 import ram.king.com.makebharathi.R;
 import ram.king.com.makebharathi.adapter.CourtesyUsersAdapter;
 import ram.king.com.makebharathi.adapter.DedicatedToUsersAdapter;
-import ram.king.com.makebharathi.models.Post;
 import ram.king.com.makebharathi.models.User;
 import ram.king.com.makebharathi.util.AppConstants;
 import ram.king.com.makebharathi.util.AppUtil;
@@ -84,7 +73,7 @@ public class NewPostActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
 
-        String prefLanguage = AppUtil.getPreferredLanguage(this, AppConstants.PREFERRED_LANGUAGE, AppConstants.DEFAULT_LANGUAGE);
+        String prefLanguage = AppUtil.getString(this, AppConstants.PREFERRED_LANGUAGE, AppConstants.DEFAULT_LANGUAGE);
         getSupportActionBar().setTitle("New Thought"+" "+"("+prefLanguage+")");
 
         lvUsersForDedication = (ListView) findViewById(R.id.users_list_view_dedication);
@@ -300,7 +289,7 @@ public class NewPostActivity extends BaseActivity {
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(NewPostActivity.this, android.R.layout.select_dialog_singlechoice, AppConstants.languages);
 
-        int selectedIndex = Arrays.asList(AppConstants.languages).indexOf(AppUtil.getPreferredLanguage(this, AppConstants.PREFERRED_LANGUAGE, AppConstants.DEFAULT_LANGUAGE));
+        int selectedIndex = Arrays.asList(AppConstants.languages).indexOf(AppUtil.getString(this, AppConstants.PREFERRED_LANGUAGE, AppConstants.DEFAULT_LANGUAGE));
         builderSingle.setSingleChoiceItems(AppConstants.languages,selectedIndex,null);
 
         builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

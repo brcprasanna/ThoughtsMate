@@ -31,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import ram.king.com.makebharathi.R;
 import ram.king.com.makebharathi.models.User;
+import ram.king.com.makebharathi.util.AppConstants;
 import ram.king.com.makebharathi.util.AppUtil;
 
 public class SignInActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
@@ -166,8 +167,12 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
             else
                 writeNewUser(user.getUid(), username, user.getEmail(),username  , null);
 
-            // Go to MainActivity
-            startActivity(new Intent(SignInActivity.this, MainActivity.class));
+            //Redirecting on basis of first time login or not
+            boolean firstTimeLogin = AppUtil.getBoolean(this, AppConstants.FIRST_TIME_LOGIN,true);
+            if (firstTimeLogin)
+                 startActivity(new Intent(SignInActivity.this, AppIntroActivity.class));
+            else
+                startActivity(new Intent(SignInActivity.this, MainActivity.class));
             finish();
         }
     }
