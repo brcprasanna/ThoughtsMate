@@ -1,9 +1,12 @@
 package ram.king.com.makebharathi.viewholder;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.ocpsoft.prettytime.PrettyTime;
@@ -22,6 +27,7 @@ import java.util.Date;
 
 import ram.king.com.makebharathi.R;
 import ram.king.com.makebharathi.models.Post;
+import ram.king.com.makebharathi.util.AppConstants;
 
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
@@ -37,6 +43,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public TextView bodyView;
     public TextView dedicatedTo;
     public TextView courtesy;
+    public ImageView share;
     PrettyTime p;
 
 
@@ -53,6 +60,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         dedicatedTo = (TextView) itemView.findViewById(R.id.post_dedicated_to);
         courtesy = (TextView) itemView.findViewById(R.id.post_courtesy);
         commentView = (ImageView) itemView.findViewById(R.id.comment);
+        share  = (ImageView)itemView.findViewById(R.id.share);
 
         p = new PrettyTime();
 

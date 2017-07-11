@@ -3,6 +3,7 @@ package ram.king.com.makebharathi.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -51,6 +52,7 @@ public class TextEditorActivity extends Activity {
     String mTitle;
     String mDedicatedTo;
     String mCourtesy;
+    String mBackupComposeText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +62,7 @@ public class TextEditorActivity extends Activity {
         mTitle = getIntent().getExtras().get("title").toString();
         mDedicatedTo = getIntent().getExtras().get("dedicated_to").toString();
         mCourtesy = getIntent().getExtras().get("courtesy").toString();
-
+        mBackupComposeText = getIntent().getExtras().get("ComposeText").toString();
         getActionBar().setTitle("Compose");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -68,6 +70,7 @@ public class TextEditorActivity extends Activity {
         knife = (KnifeText) findViewById(R.id.knife);
         // ImageGetter coming soon...
         //knife.fromHtml(EXAMPLE);
+        knife.setText(mBackupComposeText);
         knife.setSelection(knife.getEditableText().length());
 
         setupBold();
@@ -295,6 +298,17 @@ public class TextEditorActivity extends Activity {
 
     public String getUid() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
+
+    @Override
+    public void onBackPressed() {
+        String mBody = knife.getText().toString().trim();
+        if (!TextUtils.isEmpty(mBody)) {
+            Intent data = new Intent();
+            data.putExtra("ComposeText",mBody);
+            setResult(RESULT_OK, data);
+            finish();
+        }
     }
 
     private void submitPost() {

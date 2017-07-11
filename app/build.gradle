@@ -24,6 +24,16 @@ android {
         }
     }
 
+    productFlavors {
+        main {
+            dimension "all"
+
+            // TODO(developer): Replace this with your app code
+            //                  See: https://firebase.google.com/docs/dynamic-links/android/create#set-up-firebase-and-the-dynamic-links-sdk
+            resValue "string", "app_code", "gg6f2"
+        }
+    }
+
     dataBinding {
         enabled = true
     }
@@ -37,10 +47,10 @@ dependencies {
 */
 
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.google.firebase:firebase-core:10.2.0'
-    compile 'com.google.firebase:firebase-database:10.2.0'
-    compile 'com.google.firebase:firebase-auth:10.2.0'
-    compile 'com.google.android.gms:play-services-auth:10.2.0'
+    compile 'com.google.firebase:firebase-core:11.0.1'
+    compile 'com.google.firebase:firebase-database:11.0.1'
+    compile 'com.google.firebase:firebase-auth:11.0.1'
+    compile 'com.google.android.gms:play-services-auth:11.0.1'
 
 
     compile 'com.android.support:appcompat-v7:25.3.1'
@@ -70,8 +80,10 @@ dependencies {
     compile 'com.github.mthli:Knife:v1.1'
     compile 'at.blogc:expandabletextview:1.0.3'
 
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    //compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.github.apl-devs:appintro:v4.2.0'
+
+    compile 'com.google.firebase:firebase-invites:11.0.1'
 
     }
 

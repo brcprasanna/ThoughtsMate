@@ -68,6 +68,7 @@ public class NewPostActivity extends BaseActivity {
     private Button mDedicationButton;
     private Button mCourtesyButton;
 
+    private String mBackupComposeText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -336,6 +337,11 @@ public class NewPostActivity extends BaseActivity {
             mCourtesyField.setText("");
         }
 
+
+        if (TextUtils.isEmpty(mBackupComposeText)) {
+            mBackupComposeText="";
+        }
+
         // Disable button so there are no multi-posts
         //setEditingEnabled(false);
 
@@ -344,6 +350,7 @@ public class NewPostActivity extends BaseActivity {
         intent.putExtra("title", title);
         intent.putExtra("dedicated_to", dedicatedTo);
         intent.putExtra("courtesy", courtesy);
+        intent.putExtra("ComposeText", mBackupComposeText);
 
         startActivityForResult(intent, AppConstants.SAVE_WRITE_POST);
     }
@@ -352,13 +359,19 @@ public class NewPostActivity extends BaseActivity {
         // Check which request we're responding to
         if (requestCode == AppConstants.SAVE_WRITE_POST) {
             // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                finish();
+            if (resultCode == RESULT_OK && data != null) {
+                Bundle bundle = data.getExtras();
+                mBackupComposeText = bundle.get("ComposeText").toString();
+
                 //mBodyField.fromHtml(data.getExtras().get("content").toString());
                 // The user picked a contact.
                 // The Intent's data Uri identifies which contact was selected.
 
                 // Do something with the contact here (bigger example below)
+            }
+            else
+            {
+                finish();
             }
         }
     }

@@ -1,8 +1,11 @@
 package ram.king.com.makebharathi.activity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,12 +21,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.ocpsoft.prettytime.PrettyTime;
@@ -53,7 +60,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     private CircularImageView mAuthorPhoto;
     private TextView mAuthorView;
     private TextView mTitleView;
-    private ExpandableTextView mBodyView;
+    private TextView mBodyView;
     private TextView mDateView;
     private TextView mDedicatedToView;
     private TextView mCourtesyView;
@@ -68,6 +75,10 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
+
+        Intent intent = getIntent();
+        String action =  intent.getAction();
+        Uri data = intent.getData();
 
         // Get post key from intent
         mPostKey = getIntent().getStringExtra(EXTRA_POST_KEY);
@@ -85,7 +96,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         mAuthorPhoto = (CircularImageView) findViewById(R.id.post_author_photo);
         mAuthorView = (TextView) findViewById(R.id.post_author);
         mTitleView = (TextView) findViewById(R.id.post_title);
-        mBodyView = (ExpandableTextView) findViewById(R.id.post_body);
+        mBodyView = (TextView) findViewById(R.id.post_body);
         mDateView = (TextView) findViewById(R.id.post_date);
         mDedicatedToView = (TextView) findViewById(R.id.post_dedicated_to);
         mCourtesyView= (TextView) findViewById(R.id.post_courtesy);
@@ -100,6 +111,11 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         mCommentsRecycler.setLayoutManager(new LinearLayoutManager(this));
 
         prettyTime = new PrettyTime();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -154,7 +170,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         };
 
 
-        final Button buttonToggle = (Button) this.findViewById(R.id.button_toggle);
+        /*final Button buttonToggle = (Button) this.findViewById(R.id.button_toggle);
         buttonToggle.setVisibility(View.VISIBLE);
         buttonToggle.setBackgroundResource(R.drawable.ic_expand_more);
 // set animation duration via code, but preferable in your layout files by using the animation_duration attribute
@@ -215,7 +231,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                 Log.d(TAG, "ExpandableTextView collapsed");
             }
         });
-
+*/
         mPostReference.addValueEventListener(postListener);
         // Keep copy of post listener so we can remove it when app stops
         mPostListener = postListener;
@@ -436,4 +452,5 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         }
 
     }
+
 }

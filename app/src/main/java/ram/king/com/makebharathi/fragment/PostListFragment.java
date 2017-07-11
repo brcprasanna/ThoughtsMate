@@ -1,12 +1,13 @@
 package ram.king.com.makebharathi.fragment;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,15 +15,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.Resource;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,22 +30,26 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import ram.king.com.makebharathi.R;
-import ram.king.com.makebharathi.activity.MainActivity;
 import ram.king.com.makebharathi.activity.PostDetailActivity;
 import ram.king.com.makebharathi.models.Comment;
 import ram.king.com.makebharathi.models.Post;
-import ram.king.com.makebharathi.models.User;
+import ram.king.com.makebharathi.util.AppConstants;
+import ram.king.com.makebharathi.util.AppUtil;
 import ram.king.com.makebharathi.util.MessageEvent;
 import ram.king.com.makebharathi.viewholder.PostViewHolder;
 
@@ -72,7 +75,7 @@ public abstract class PostListFragment extends BaseFragment {
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_all_posts, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_all_posts, container, false);
 
         // [START create_database_reference]
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -84,6 +87,10 @@ public abstract class PostListFragment extends BaseFragment {
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
         return rootView;
     }
+
+
+
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -118,6 +125,24 @@ public abstract class PostListFragment extends BaseFragment {
                         Intent intent = new Intent(activity, PostDetailActivity.class);
                         intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, postKey);
                         startActivity(intent);
+                    }
+                });
+
+                // Create a deep link and display it in the UI
+                Uri deepLink = null;
+                try {
+                    deepLink = Uri.parse(buildDeepLink(Uri.parse(AppConstants.DEEP_LINK_URL+"/"+postKey), 0));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                //((TextView) findViewById(R.id.link_view_send)).setText(deepLink.toString());
+
+                // Share button click listener
+                final Uri finalDeepLink = deepLink;
+                viewHolder.share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        shareDeepLink(finalDeepLink.toString());
                     }
                 });
 
@@ -218,6 +243,7 @@ public abstract class PostListFragment extends BaseFragment {
                 super.onDataChanged();
                 mProgressBar.setVisibility(View.GONE);
                 mRecycler.setVisibility(View.VISIBLE);
+                AppUtil.getDynamicLink(activity);
             }
         };
 
@@ -238,6 +264,77 @@ public abstract class PostListFragment extends BaseFragment {
 
         mRecycler.setAdapter(mAdapter);
     }
+
+    /**
+     * Build a Firebase Dynamic Link.
+     * https://firebase.google.com/docs/dynamic-links/android/create#create-a-dynamic-link-from-parameters
+     *
+     * @param deepLink the deep link your app will open. This link must be a valid URL and use the
+     *                 HTTP or HTTPS scheme.
+     * @param minVersion the {@code versionCode} of the minimum version of your app that can open
+     *                   the deep link. If the installed app is an older version, the user is taken
+     *                   to the Play store to upgrade the app. Pass 0 if you do not
+     *                   require a minimum version.
+     * @return a {@link Uri} representing a properly formed deep link.
+     */
+    @VisibleForTesting
+    public String buildDeepLink(@NonNull Uri deepLink, int minVersion) throws UnsupportedEncodingException {
+        String domain = getString(R.string.app_code) + ".app.goo.gl/";
+
+        // Set dynamic link parameters:
+        //  * Domain (required)
+        //  * Android Parameters (required)
+        //  * Deep link
+        // [START build_dynamic_link]
+        DynamicLink.Builder builder = FirebaseDynamicLinks.getInstance()
+                .createDynamicLink()
+                .setDynamicLinkDomain(domain)
+                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder()
+                        .setMinimumVersion(minVersion)
+                        .build())
+                .setSocialMetaTagParameters(
+                        new DynamicLink.SocialMetaTagParameters.Builder()
+                                .setDescription("Share your thoughts")
+                                .setImageUrl(Uri.parse("https://static.wixstatic.com/media/5227b1_0baa4b32227c486d9d868e83a3bf5f2e~mv2.png/v1/fill/w_132,h_132,al_c,usm_0.66_1.00_0.01/5227b1_0baa4b32227c486d9d868e83a3bf5f2e~mv2.png"))
+                                .setTitle(activity.getResources().getString(R.string.app_name))
+                                .build())
+                .setLink(deepLink);
+
+        // Build the dynamic link
+        DynamicLink link = builder.buildDynamicLink();
+        // [END build_dynamic_link]
+
+        // Return the dynamic link as a URI
+        return  java.net.URLDecoder.decode(String.valueOf(link.getUri()), "UTF-8");
+    }
+
+    public String createDynamicLink() throws UnsupportedEncodingException {
+        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse("https://example.com/"))
+                .setDynamicLinkDomain("abc123.app.goo.gl")
+                .setAndroidParameters(
+                        new DynamicLink.AndroidParameters.Builder("com.example.android")
+                                .setMinimumVersion(125)
+                                .build())
+                .setSocialMetaTagParameters(
+                        new DynamicLink.SocialMetaTagParameters.Builder()
+                                .setImageUrl(Uri.parse(String.valueOf(R.drawable.ic_launcher)))
+                                .setTitle("Example of a Dynamic Link")
+                                .setDescription("This link works whether the app is installed or not!")
+                                .build())
+                .buildDynamicLink();
+        return  java.net.URLDecoder.decode(String.valueOf(dynamicLink.getUri()), "UTF-8");
+    }
+
+    private void shareDeepLink(String deepLink) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Firebase Deep Link");
+        intent.putExtra(Intent.EXTRA_TEXT,deepLink);
+
+        startActivity(intent);
+    }
+
 
     @Override
     public void onStart() {
@@ -266,6 +363,7 @@ public abstract class PostListFragment extends BaseFragment {
         if(event.getMessage().equals("changed")) {
             setupAdapterWithQuery();
             mAdapter.notifyDataSetChanged();
+            mProgressBar.setVisibility(View.VISIBLE);
         }
         else if (event.getMessage().equals("refresh"))
         {
