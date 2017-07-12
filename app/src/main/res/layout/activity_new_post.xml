@@ -28,7 +28,7 @@
         android:id="@+id/field_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLines="2"
+        android:maxLines="1"
         android:hint="Title" />
     </android.support.design.widget.TextInputLayout>
 

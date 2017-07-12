@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,8 +18,8 @@ import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,7 +31,7 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -43,6 +42,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import ram.king.com.makebharathi.R;
 import ram.king.com.makebharathi.activity.PostDetailActivity;
@@ -129,20 +129,22 @@ public abstract class PostListFragment extends BaseFragment {
                 });
 
                 // Create a deep link and display it in the UI
-                Uri deepLink = null;
-                try {
-                    deepLink = Uri.parse(buildDeepLink(Uri.parse(AppConstants.DEEP_LINK_URL+"/"+postKey), 0));
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                //Uri deepLink = null;
+                //deepLink = Uri.parse(createShortDynamicLink(Uri.parse(AppConstants.DEEP_LINK_URL+"/"+postKey), 0, viewHolder, model.author, model.title));
+                //createShortDynamicLink(Uri.parse(AppConstants.DEEP_LINK_URL+"/"+postKey), 0, viewHolder,model.author,model.title);
                 //((TextView) findViewById(R.id.link_view_send)).setText(deepLink.toString());
 
                 // Share button click listener
-                final Uri finalDeepLink = deepLink;
+                //final Uri finalDeepLink = deepLink;
                 viewHolder.share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        shareDeepLink(finalDeepLink.toString());
+                        try {
+                            createShortDynamicLink(Uri.parse(AppConstants.DEEP_LINK_URL+"/"+postKey), 0, viewHolder,model.author,model.title);
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        //shareDeepLink(finalDeepLink.toString().replace(" ","%20"),model.author,model.title);
                     }
                 });
 
@@ -275,7 +277,6 @@ public abstract class PostListFragment extends BaseFragment {
      *                   the deep link. If the installed app is an older version, the user is taken
      *                   to the Play store to upgrade the app. Pass 0 if you do not
      *                   require a minimum version.
-     * @return a {@link Uri} representing a properly formed deep link.
      */
     @VisibleForTesting
     public String buildDeepLink(@NonNull Uri deepLink, int minVersion) throws UnsupportedEncodingException {
@@ -294,7 +295,6 @@ public abstract class PostListFragment extends BaseFragment {
                         .build())
                 .setSocialMetaTagParameters(
                         new DynamicLink.SocialMetaTagParameters.Builder()
-                                .setDescription("Share your thoughts")
                                 .setImageUrl(Uri.parse("https://static.wixstatic.com/media/5227b1_0baa4b32227c486d9d868e83a3bf5f2e~mv2.png/v1/fill/w_132,h_132,al_c,usm_0.66_1.00_0.01/5227b1_0baa4b32227c486d9d868e83a3bf5f2e~mv2.png"))
                                 .setTitle(activity.getResources().getString(R.string.app_name))
                                 .build())
@@ -326,11 +326,35 @@ public abstract class PostListFragment extends BaseFragment {
         return  java.net.URLDecoder.decode(String.valueOf(dynamicLink.getUri()), "UTF-8");
     }
 
-    private void shareDeepLink(String deepLink) {
+    private void createShortDynamicLink(@NonNull Uri deepLink, int minVersion, final PostViewHolder viewHolder, final String author, final String title) throws UnsupportedEncodingException {
+        Uri shortLink;
+        String domain = getString(R.string.app_code) + ".app.goo.gl/";
+
+        Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLongLink(Uri.parse(buildDeepLink(deepLink,minVersion)))
+                .buildShortDynamicLink()
+                .addOnCompleteListener(activity, new OnCompleteListener<ShortDynamicLink>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                        if (task.isSuccessful()) {
+                            // Short link created
+                            final Uri shortLink = task.getResult().getShortLink();
+                            Uri flowchartLink = task.getResult().getPreviewLink();
+                            shareDeepLink(shortLink.toString().replace(" ","%20"),author,title);
+                        } else {
+                            // Error
+                            // ...
+                        }
+
+                    }
+                });
+    }
+
+    private void shareDeepLink(String deepLink,String author, String title) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_SUBJECT, "Firebase Deep Link");
-        intent.putExtra(Intent.EXTRA_TEXT,deepLink);
+        intent.putExtra(Intent.EXTRA_TEXT,author+" wrote on "+title+" "+deepLink+" via ThoughtsMate");
 
         startActivity(intent);
     }
