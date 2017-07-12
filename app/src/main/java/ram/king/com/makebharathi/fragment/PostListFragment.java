@@ -327,7 +327,6 @@ public abstract class PostListFragment extends BaseFragment {
     }
 
     private void createShortDynamicLink(@NonNull Uri deepLink, int minVersion, final PostViewHolder viewHolder, final String author, final String title) throws UnsupportedEncodingException {
-        Uri shortLink;
         String domain = getString(R.string.app_code) + ".app.goo.gl/";
 
         Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
