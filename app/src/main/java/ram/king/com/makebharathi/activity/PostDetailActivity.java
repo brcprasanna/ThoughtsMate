@@ -132,7 +132,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                 Glide.with(PostDetailActivity.this).load(post.photoUrl)
                         .into(mAuthorPhoto);
 
-                getSupportActionBar().setTitle(post.title);
+                //getSupportActionBar().setTitle(post.title);
 
                 mAuthorView.setText(post.author);
                 mTitleView.setText(post.title);

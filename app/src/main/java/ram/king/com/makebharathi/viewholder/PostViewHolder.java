@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,6 +45,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public TextView dedicatedTo;
     public TextView courtesy;
     public ImageView share;
+    public ImageButton more;
+    public LinearLayout content;
     PrettyTime p;
 
 
@@ -61,14 +64,15 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         courtesy = (TextView) itemView.findViewById(R.id.post_courtesy);
         commentView = (ImageView) itemView.findViewById(R.id.comment);
         share  = (ImageView)itemView.findViewById(R.id.share);
-
+        more = (ImageButton) itemView.findViewById(R.id.more);
+        content = (LinearLayout) itemView.findViewById(R.id.content_layout);
         p = new PrettyTime();
 
         titleView.setMaxLines(1);
     }
 
     public void bindToPost(Post post, View.OnClickListener starClickListener,
-                           View.OnClickListener deleteClickListener) {
+                           View.OnClickListener deleteClickListener, View.OnClickListener moreClickListener, View.OnClickListener contentListener) {
         titleView.setText(post.title);
         authorView.setText(post.author);
 
@@ -95,5 +99,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         bodyView.setText(post.body);
         starView.setOnClickListener(starClickListener);
         deleteView.setOnClickListener(deleteClickListener);
+        more.setOnClickListener(moreClickListener);
+        content.setOnClickListener(contentListener);
     }
 }
