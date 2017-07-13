@@ -1,12 +1,14 @@
 package ram.king.com.makebharathi.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -23,8 +25,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -34,12 +38,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -51,6 +58,8 @@ import ram.king.com.makebharathi.R;
 import ram.king.com.makebharathi.models.Comment;
 import ram.king.com.makebharathi.models.Post;
 import ram.king.com.makebharathi.models.User;
+import ram.king.com.makebharathi.util.AppConstants;
+import ram.king.com.makebharathi.viewholder.PostViewHolder;
 
 public class PostDetailActivity extends BaseActivity implements View.OnClickListener {
 
@@ -88,6 +97,8 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
+
+        getSupportActionBar().setTitle("");
 
         Intent intent = getIntent();
         String action =  intent.getAction();
@@ -144,46 +155,54 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
                 post = dataSnapshot.getValue(Post.class);
-                Glide.with(PostDetailActivity.this).load(post.photoUrl)
-                        .into(mAuthorPhoto);
+                if (post != null) {
+                    Glide.with(PostDetailActivity.this).load(post.photoUrl)
+                            .into(mAuthorPhoto);
 
-                //getSupportActionBar().setTitle(post.title);
-
-                mAuthorView.setText(post.author);
-                mTitleView.setText(post.title);
-                if (!TextUtils.isEmpty(post.dedicatedTo)) {
-                    mDedicatedToView.setVisibility(View.VISIBLE);
-                    mDedicatedToView.setText("Dedicated To : " + post.dedicatedTo);
-                }
-                else {
-                    mDedicatedToView.setVisibility(View.GONE);
-                }
-                if (!TextUtils.isEmpty(post.courtesy)) {
-                    mCourtesyView.setVisibility(View.VISIBLE);
-                    mCourtesyView.setText("Courtesy : " + post.courtesy);
-                }
-                else {
-                    mCourtesyView.setVisibility(View.GONE);
-                }
-
-                mBodyView.setText(post.body);
-
-
-                long yourmilliseconds = (long) post.timestamp;
-                if (prettyTime != null)
-                    mDateView.setText(prettyTime.format(new Date(yourmilliseconds)));
-
-                if (menu != null) {
-                    MenuItem item = menu.findItem(R.id.menu_like);
-
-                    if (post != null && post.stars.containsKey(getUid())) {
-                        item.setIcon(R.drawable.ic_favorite_white_24dp);
+                    mAuthorView.setText(post.author);
+                    mTitleView.setText(post.title);
+                    if (!TextUtils.isEmpty(post.dedicatedTo)) {
+                        mDedicatedToView.setVisibility(View.VISIBLE);
+                        mDedicatedToView.setText("Dedicated To : " + post.dedicatedTo);
                     } else {
-                        item.setIcon(R.drawable.ic_favorite_border_white_24dp);
+                        mDedicatedToView.setVisibility(View.GONE);
+                    }
+                    if (!TextUtils.isEmpty(post.courtesy)) {
+                        mCourtesyView.setVisibility(View.VISIBLE);
+                        mCourtesyView.setText("Courtesy : " + post.courtesy);
+                    } else {
+                        mCourtesyView.setVisibility(View.GONE);
+                    }
+
+                    mBodyView.setText(post.body);
+
+
+                    long yourmilliseconds = (long) post.timestamp;
+                    if (prettyTime != null)
+                        mDateView.setText(prettyTime.format(new Date(yourmilliseconds)));
+
+                    if (menu != null) {
+                        MenuItem itemLike = menu.findItem(R.id.menu_like);
+                        MenuItem itemLikeNum = menu.findItem(R.id.menu_like_num);
+                        MenuItem itemDelete = menu.findItem(R.id.menu_delete);
+
+                        if (post != null && post.stars.containsKey(getUid())) {
+                            itemLike.setIcon(R.drawable.ic_favorite_white_24dp);
+                        } else {
+                            itemLike.setIcon(R.drawable.ic_favorite_border_white_24dp);
+                        }
+
+                        if (post != null) {
+                            itemLikeNum.setTitle(String.valueOf(post.starCount));
+                        }
+
+                        if (post != null && post.uid.equals(getUid())) {
+                            itemDelete.setVisible(true);
+                        } else {
+                            itemDelete.setVisible(false);
+                        }
                     }
                 }
-
-
             }
 
             @Override
@@ -483,14 +502,25 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_detail, menu);
-        MenuItem item = menu.findItem(R.id.menu_like);
+        MenuItem itemLike = menu.findItem(R.id.menu_like);
+        MenuItem itemLikeNum = menu.findItem(R.id.menu_like_num);
+        MenuItem itemDelete = menu.findItem(R.id.menu_delete);
 
         if (post != null && post.stars.containsKey(getUid())) {
-            item.setIcon(R.drawable.ic_favorite_white_24dp);
+            itemLike.setIcon(R.drawable.ic_favorite_white_24dp);
         } else {
-            item.setIcon(R.drawable.ic_favorite_border_white_24dp);
+            itemLike.setIcon(R.drawable.ic_favorite_border_white_24dp);
         }
 
+        if (post != null)
+            itemLikeNum.setTitle(String.valueOf(post.starCount));
+
+
+        if (post != null && post.uid.equals(getUid())) {
+            itemDelete.setVisible(true);
+        } else {
+            itemDelete.setVisible(false);
+        }
         return true;
     }
 
@@ -501,8 +531,40 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
             onClickStar();
             return true;
         } else if (i == R.id.menu_share) {
+            try {
+                createShortDynamicLink(Uri.parse(AppConstants.DEEP_LINK_URL+"/"+mPostReference.toString()), 0, post.author,post.title);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             return true;
         } else if (i == R.id.menu_delete) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (!isFinishing()) {
+                        new AlertDialog.Builder(PostDetailActivity.this)
+                                .setTitle(getResources().getString(R.string.delete_header))
+                                .setMessage(getResources().getString(R.string.delete_message))
+                                .setCancelable(false)
+                                .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        DatabaseReference globalPostRef = mDatabase.child("posts").child(mPostReference.getKey());
+                                        DatabaseReference userPostRef = mDatabase.child("user-posts").child(post.uid).child(mPostReference.getKey());
+                                        DatabaseReference starUserPostRef = mDatabase.child("star-user-posts").child(getUid()).child(mPostReference.getKey());// Run two transactions
+                                        DatabaseReference commentPostRef = mDatabase.child("post-comments").child(mPostReference.getKey());
+                                        globalPostRef.removeValue();
+                                        userPostRef.removeValue();
+                                        starUserPostRef.removeValue();
+                                        commentPostRef.removeValue();
+                                        finish();
+                                    }
+                                }).setNegativeButton("CANCEL", null).show();
+                    }
+
+                }
+            });
             return true;
         }
         else
@@ -560,6 +622,67 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                 Log.d(TAG, "postTransaction:onComplete:" + databaseError);
             }
         });
+    }
+
+    private void createShortDynamicLink(@NonNull Uri deepLink, int minVersion, final String author, final String title) throws UnsupportedEncodingException {
+        String domain = getString(R.string.app_code) + ".app.goo.gl/";
+
+        Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLongLink(Uri.parse(buildDeepLink(deepLink,minVersion)))
+                .buildShortDynamicLink()
+                .addOnCompleteListener(this, new OnCompleteListener<ShortDynamicLink>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                        if (task.isSuccessful()) {
+                            // Short link created
+                            final Uri shortLink = task.getResult().getShortLink();
+                            Uri flowchartLink = task.getResult().getPreviewLink();
+                            shareDeepLink(shortLink.toString().replace(" ","%20"),author,title);
+                        } else {
+                            // Error
+                            // ...
+                        }
+
+                    }
+                });
+    }
+
+    private void shareDeepLink(String deepLink,String author, String title) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Firebase Deep Link");
+        intent.putExtra(Intent.EXTRA_TEXT,author+" wrote on "+title+" "+deepLink+" via ThoughtsMate");
+
+        startActivity(intent);
+    }
+
+    public String buildDeepLink(@NonNull Uri deepLink, int minVersion) throws UnsupportedEncodingException {
+        String domain = getString(R.string.app_code) + ".app.goo.gl/";
+
+        // Set dynamic link parameters:
+        //  * Domain (required)
+        //  * Android Parameters (required)
+        //  * Deep link
+        // [START build_dynamic_link]
+        DynamicLink.Builder builder = FirebaseDynamicLinks.getInstance()
+                .createDynamicLink()
+                .setDynamicLinkDomain(domain)
+                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder()
+                        .setMinimumVersion(minVersion)
+                        .build())
+                .setSocialMetaTagParameters(
+                        new DynamicLink.SocialMetaTagParameters.Builder()
+                                .setImageUrl(Uri.parse("https://static.wixstatic.com/media/5227b1_0baa4b32227c486d9d868e83a3bf5f2e~mv2.png/v1/fill/w_132,h_132,al_c,usm_0.66_1.00_0.01/5227b1_0baa4b32227c486d9d868e83a3bf5f2e~mv2.png"))
+                                .setTitle(getResources().getString(R.string.app_name))
+                                .build())
+                .setLink(deepLink);
+
+        // Build the dynamic link
+        DynamicLink link = builder.buildDynamicLink();
+        // [END build_dynamic_link]
+
+        // Return the dynamic link as a URI
+        return  java.net.URLDecoder.decode(String.valueOf(link.getUri()), "UTF-8");
     }
 
 

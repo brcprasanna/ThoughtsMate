@@ -350,24 +350,6 @@ public abstract class PostListFragment extends BaseFragment {
         return  java.net.URLDecoder.decode(String.valueOf(link.getUri()), "UTF-8");
     }
 
-    public String createDynamicLink() throws UnsupportedEncodingException {
-        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse("https://example.com/"))
-                .setDynamicLinkDomain("abc123.app.goo.gl")
-                .setAndroidParameters(
-                        new DynamicLink.AndroidParameters.Builder("com.example.android")
-                                .setMinimumVersion(125)
-                                .build())
-                .setSocialMetaTagParameters(
-                        new DynamicLink.SocialMetaTagParameters.Builder()
-                                .setImageUrl(Uri.parse(String.valueOf(R.drawable.ic_launcher)))
-                                .setTitle("Example of a Dynamic Link")
-                                .setDescription("This link works whether the app is installed or not!")
-                                .build())
-                .buildDynamicLink();
-        return  java.net.URLDecoder.decode(String.valueOf(dynamicLink.getUri()), "UTF-8");
-    }
-
     private void createShortDynamicLink(@NonNull Uri deepLink, int minVersion, final PostViewHolder viewHolder, final String author, final String title) throws UnsupportedEncodingException {
         String domain = getString(R.string.app_code) + ".app.goo.gl/";
 
