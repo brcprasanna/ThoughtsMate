@@ -45,7 +45,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 import ram.king.com.makebharathi.R;
 import ram.king.com.makebharathi.activity.PostDetailActivity;
@@ -177,14 +176,7 @@ public abstract class PostListFragment extends BaseFragment {
                 viewHolder.bindToPost(model, new View.OnClickListener() {
                     @Override
                     public void onClick(View starView) {
-                        // Need to write to both places the post is stored
-                        DatabaseReference globalPostRef = mDatabase.child("posts").child(postRef.getKey());
-                        DatabaseReference userPostRef = mDatabase.child("user-posts").child(model.uid).child(postRef.getKey());
-
-                        // Run two transactions
-
-                        onStarClicked(globalPostRef);
-                        onStarClicked(userPostRef);
+                        onClickStar(starView, postRef, model);
                     }
                 },new View.OnClickListener(){
                     public void onClick(View deleteView) {
@@ -194,74 +186,12 @@ public abstract class PostListFragment extends BaseFragment {
                 }, new View.OnClickListener() {
                     @Override
                     public void onClick(View moreView) {
-                        PopupMenu popup = new PopupMenu(moreView.getContext(),moreView );
-                        MenuInflater inflater = popup.getMenuInflater();
-                        inflater.inflate(R.menu.menu_card, popup.getMenu());
-                        MenuItem item = popup.getMenu().findItem(R.id.menu_delete);
-
-                        if (model != null && model.uid.equals(getUid())) {
-                            item.setVisible(true);
-                        } else {
-                            item.setVisible(false);
-                        }
-
-                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                switch (item.getItemId()) {
-                                    case R.id.menu_delete:
-
-                                        activity.runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-
-                                                if (!activity.isFinishing()){
-                                                    new AlertDialog.Builder(activity)
-                                                            .setTitle(getResources().getString(R.string.delete_header))
-                                                            .setMessage(getResources().getString(R.string.delete_message))
-                                                            .setCancelable(false)
-                                                            .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(DialogInterface dialog, int which) {
-                                                                    DatabaseReference globalPostRef = mDatabase.child("posts").child(postRef.getKey());
-                                                                    DatabaseReference userPostRef = mDatabase.child("user-posts").child(model.uid).child(postRef.getKey());
-                                                                    DatabaseReference starUserPostRef = mDatabase.child("star-user-posts").child(getUid()).child(postRef.getKey());// Run two transactions
-                                                                    DatabaseReference commentPostRef = mDatabase.child("post-comments").child(postRef.getKey());
-                                                                    globalPostRef.removeValue();
-                                                                    userPostRef.removeValue();
-                                                                    starUserPostRef.removeValue();
-                                                                    commentPostRef.removeValue();
-                                                                }
-                                                            }).setNegativeButton("CANCEL", null).show();
-                                                }
-                                            }
-                                        });
-                                        break;
-                                    case R.id.menu_share:
-                                        try {
-                                            createShortDynamicLink(Uri.parse(AppConstants.DEEP_LINK_URL+"/"+postKey), 0, viewHolder,model.author,model.title);
-                                        } catch (UnsupportedEncodingException e) {
-                                            e.printStackTrace();
-                                        }
-                                        break;
-                                    default:
-                                        return false;
-                                }
-                                return false;
-                            }
-                        });
-
-                        //popup.setOnMenuItemClickListener(new MyMenuItemClickListener(position));
-                        popup.show();
+                        onClickMore(moreView, viewHolder, postRef, model, postKey);
                     }
                 },  new View.OnClickListener() {
                             @Override
                             public void onClick(View content) {
-                                // Launch PostDetailActivity
-                                Intent intent = new Intent(activity, PostDetailActivity.class);
-                                intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, postKey);
-                                startActivity(intent);
+                                onClickContent(content, postKey);
                             }
                         }
                     );
@@ -293,6 +223,90 @@ public abstract class PostListFragment extends BaseFragment {
 */
 
         mRecycler.setAdapter(mAdapter);
+    }
+
+    private void onClickContent(View content, String postKey) {
+        // Launch PostDetailActivity
+        Intent intent = new Intent(activity, PostDetailActivity.class);
+        intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, postKey);
+        startActivity(intent);
+    }
+
+    private void onClickMore(View moreView, final PostViewHolder viewHolder, final DatabaseReference postRef, final Post model, final String postKey) {
+        PopupMenu popup = new PopupMenu(moreView.getContext(),moreView );
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.menu_card, popup.getMenu());
+        MenuItem item = popup.getMenu().findItem(R.id.menu_delete);
+
+        if (model != null && model.uid.equals(getUid())) {
+            item.setVisible(true);
+        } else {
+            item.setVisible(false);
+        }
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_delete:
+
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                if (!activity.isFinishing()){
+                                    new AlertDialog.Builder(activity)
+                                            .setTitle(getResources().getString(R.string.delete_header))
+                                            .setMessage(getResources().getString(R.string.delete_message))
+                                            .setCancelable(false)
+                                            .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    DatabaseReference globalPostRef = mDatabase.child("posts").child(postRef.getKey());
+                                                    DatabaseReference userPostRef = mDatabase.child("user-posts").child(model.uid).child(postRef.getKey());
+                                                    DatabaseReference starUserPostRef = mDatabase.child("star-user-posts").child(getUid()).child(postRef.getKey());// Run two transactions
+                                                    DatabaseReference commentPostRef = mDatabase.child("post-comments").child(postRef.getKey());
+                                                    globalPostRef.removeValue();
+                                                    userPostRef.removeValue();
+                                                    starUserPostRef.removeValue();
+                                                    commentPostRef.removeValue();
+                                                }
+                                            }).setNegativeButton("CANCEL", null).show();
+                                }
+                            }
+                        });
+                        break;
+                    case R.id.menu_share:
+                        try {
+                            createShortDynamicLink(Uri.parse(AppConstants.DEEP_LINK_URL+"/"+postKey), 0, viewHolder,model.author,model.title);
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    default:
+                        return false;
+                }
+                return false;
+            }
+        });
+
+        //popup.setOnMenuItemClickListener(new MyMenuItemClickListener(position));
+        popup.show();
+    }
+
+
+    private void onClickStar(View starView, DatabaseReference postRef, Post model) {
+
+        // Need to write to both places the post is stored
+        DatabaseReference globalPostRef = mDatabase.child("posts").child(postRef.getKey());
+        DatabaseReference userPostRef = mDatabase.child("user-posts").child(model.uid).child(postRef.getKey());
+
+        // Run two transactions
+
+        onStarClicked(globalPostRef);
+        onStarClicked(userPostRef);
+
     }
 
     /**

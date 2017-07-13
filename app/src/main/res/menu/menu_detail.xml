@@ -1,0 +1,28 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.PostDetailActivity">
+
+    <item
+        android:id="@+id/menu_like"
+        android:title="Like"
+        android:visible="true"
+        android:icon="@drawable/ic_favorite_border_white_24dp"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_share"
+        android:icon="@drawable/ic_share_white_24dp"
+        android:visible="true"
+        android:title="Share"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_delete"
+        android:icon="@drawable/ic_delete_white_24dp"
+        android:visible="true"
+        android:title="Delete"
+        app:showAsAction="always"/>
+
+
+</menu>

@@ -42,7 +42,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             tools:text="someauthor@email.com"
-            android:text="date"
             android:singleLine="true"
             android:layout_below="@id/post_author"
             android:textColor="@color/black"

@@ -12,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
@@ -23,11 +25,14 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
@@ -37,7 +42,9 @@ import org.ocpsoft.prettytime.PrettyTime;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import at.blogc.android.views.ExpandableTextView;
 import ram.king.com.makebharathi.R;
@@ -71,6 +78,12 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
 
     PrettyTime prettyTime;
 
+    private DatabaseReference mDatabase;
+
+    private Menu menu;
+
+    Post post;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +92,8 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         Intent intent = getIntent();
         String action =  intent.getAction();
         Uri data = intent.getData();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Get post key from intent
         mPostKey = getIntent().getStringExtra(EXTRA_POST_KEY);
@@ -128,7 +143,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
-                Post post = dataSnapshot.getValue(Post.class);
+                post = dataSnapshot.getValue(Post.class);
                 Glide.with(PostDetailActivity.this).load(post.photoUrl)
                         .into(mAuthorPhoto);
 
@@ -157,6 +172,17 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                 long yourmilliseconds = (long) post.timestamp;
                 if (prettyTime != null)
                     mDateView.setText(prettyTime.format(new Date(yourmilliseconds)));
+
+                if (menu != null) {
+                    MenuItem item = menu.findItem(R.id.menu_like);
+
+                    if (post != null && post.stars.containsKey(getUid())) {
+                        item.setIcon(R.drawable.ic_favorite_white_24dp);
+                    } else {
+                        item.setIcon(R.drawable.ic_favorite_border_white_24dp);
+                    }
+                }
+
 
             }
 
@@ -452,5 +478,90 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         }
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        getMenuInflater().inflate(R.menu.menu_detail, menu);
+        MenuItem item = menu.findItem(R.id.menu_like);
+
+        if (post != null && post.stars.containsKey(getUid())) {
+            item.setIcon(R.drawable.ic_favorite_white_24dp);
+        } else {
+            item.setIcon(R.drawable.ic_favorite_border_white_24dp);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int i = item.getItemId();
+        if (i == R.id.menu_like) {
+            onClickStar();
+            return true;
+        } else if (i == R.id.menu_share) {
+            return true;
+        } else if (i == R.id.menu_delete) {
+            return true;
+        }
+        else
+            return super.onOptionsItemSelected(item);
+    }
+
+    private void onClickStar() {
+
+        // Need to write to both places the post is stored
+        DatabaseReference globalPostRef = mDatabase.child("posts").child(mPostReference.getKey());
+        DatabaseReference userPostRef = mDatabase.child("user-posts").child(post.uid).child(mPostReference.getKey());
+
+        // Run two transactions
+
+        onStarClicked(globalPostRef);
+        onStarClicked(userPostRef);
+
+    }
+
+    private void onStarClicked(final DatabaseReference postRef) {
+        postRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                Post p = mutableData.getValue(Post.class);
+                if (p == null) {
+                    return Transaction.success(mutableData);
+                }
+
+                if (p.stars.containsKey(getUid())) {
+                    // Unstar the post and remove self from stars
+                    p.starCount = p.starCount - 1;
+                    p.stars.remove(getUid());
+                    mDatabase.child("star-user-posts").child(getUid()).child(postRef.getKey()).removeValue();
+                } else {
+                    // Star the post and add self to stars
+                    p.starCount = p.starCount + 1;
+                    p.stars.put(getUid(), true);
+                    Map<String, Object> postValues = p.toMap();
+
+                    Map<String, Object> childUpdates = new HashMap<>();
+                    childUpdates.put("/star-user-posts/" + getUid() + "/" + postRef.getKey(), postValues);
+
+                    mDatabase.updateChildren(childUpdates);
+                }
+
+                // Set value and report transaction success
+                mutableData.setValue(p);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b,
+                                   DataSnapshot dataSnapshot) {
+                // Transaction completed
+                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+            }
+        });
+    }
+
+
 
 }
