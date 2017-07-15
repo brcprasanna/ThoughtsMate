@@ -3,11 +3,13 @@ package ram.king.com.makebharathi.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -31,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
@@ -57,19 +60,19 @@ import ram.king.com.makebharathi.viewholder.PostViewHolder;
 public abstract class PostListFragment extends BaseFragment {
 
     private static final String TAG = "PostListFragment";
-
+    SharedPreferences sharedPref;
+    // [END define_database_reference]
+    String preferredLanguage;
     // [START define_database_reference]
     private DatabaseReference mDatabase;
-    // [END define_database_reference]
-
     private FirebaseRecyclerAdapter<Post, PostViewHolder> mAdapter;
     private RecyclerView mRecycler;
     private LinearLayoutManager mManager;
-
     private ProgressBar mProgressBar;
-
     private List<String> mCommentIds = new ArrayList<>();
     private List<Comment> mComments = new ArrayList<>();
+    private DatabaseReference mCommentsReference;
+
     public PostListFragment() {}
 
     @Override
@@ -129,12 +132,32 @@ public abstract class PostListFragment extends BaseFragment {
                     }
                 });*/
 
+                mCommentsReference = FirebaseDatabase.getInstance().getReference()
+                        .child("post-comments").child(postKey);
+
+
                 // Determine if the current user has liked this post and set UI accordingly
                 if (model.stars.containsKey(getUid())) {
                     viewHolder.starView.setImageResource(R.drawable.ic_favorite_black_24dp);
                 } else {
                     viewHolder.starView.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                 }
+
+                mCommentsReference.addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                //Get map of users in datasnapshot
+                                if (dataSnapshot != null)
+                                    setCommentCount((Map<String, Object>) dataSnapshot.getValue(), viewHolder);
+                                //NewPostActivity.this.usersListAdapterForDedicatedTo.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                //handle databaseError
+                            }
+                        });
 
                 Glide
                         .with(activity)
@@ -236,6 +259,18 @@ public abstract class PostListFragment extends BaseFragment {
 
         mRecycler.setAdapter(mAdapter);
     }
+
+    private void setCommentCount(Map<String, Object> value, PostViewHolder viewHolder) {
+        int count = 0;
+        if (value != null) {
+            for (Map.Entry<String, Object> entry : value.entrySet()) {
+                count++;
+            }
+        }
+        if (count > 0)
+            viewHolder.commentCountView.setText(String.valueOf(count));
+    }
+
 
     private void onClickContent(String postKey, boolean focusComment) {
         // Launch PostDetailActivity
@@ -417,6 +452,10 @@ public abstract class PostListFragment extends BaseFragment {
             setupAdapterWithQuery();
             mAdapter.notifyDataSetChanged();
             mProgressBar.setVisibility(View.VISIBLE);
+            sharedPref = activity.getSharedPreferences(
+                    getString(R.string.preference_file), Context.MODE_PRIVATE);
+            preferredLanguage = sharedPref.getString(AppConstants.PREFERRED_LANGUAGE, AppConstants.DEFAULT_LANGUAGE);
+            ((AppCompatActivity) activity).getSupportActionBar().setTitle(getResources().getString(R.string.app_name) + " " + "(" + preferredLanguage + ")");
         }
         else if (event.getMessage().equals("refresh"))
         {

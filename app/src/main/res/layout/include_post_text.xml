@@ -59,7 +59,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="8"
-            android:text="@string/lorem"
             android:textSize="16sp" />
 
         <!-- Optional parameter animation_duration: sets the duration of the expand animation -->

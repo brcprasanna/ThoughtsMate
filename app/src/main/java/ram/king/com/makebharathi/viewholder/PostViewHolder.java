@@ -35,6 +35,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public ImageView share;
     public ImageButton more;
     public LinearLayout content;
+    public TextView commentCountView;
     PrettyTime p;
 
 
@@ -54,6 +55,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         share = (ImageView) itemView.findViewById(R.id.button_share);
         more = (ImageButton) itemView.findViewById(R.id.more);
         content = (LinearLayout) itemView.findViewById(R.id.content_layout);
+        commentCountView = (TextView) itemView.findViewById(R.id.comment_count);
         p = new PrettyTime();
 
         titleView.setMaxLines(1);

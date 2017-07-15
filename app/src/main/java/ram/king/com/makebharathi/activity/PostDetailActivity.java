@@ -300,7 +300,38 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         // Listen for comments
         mAdapter = new CommentAdapter(this, mCommentsReference);
         mCommentsRecycler.setAdapter(mAdapter);
+
+        mCommentsReference.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        //Get map of users in datasnapshot
+                        setCommentCount((Map<String, Object>) dataSnapshot.getValue());
+                        //NewPostActivity.this.usersListAdapterForDedicatedTo.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //handle databaseError
+                    }
+                });
+
     }
+
+    private void setCommentCount(Map<String, Object> value) {
+        int count = 0;
+        if (value != null) {
+            for (Map.Entry<String, Object> entry : value.entrySet()) {
+                count++;
+            }
+            if (count > 0)
+                mViewCommentButton.setText(getString(R.string.view_comments) + " (" + count + ")");
+            else
+                mViewCommentButton.setText(getString(R.string.write_a_comment));
+        } else
+            mViewCommentButton.setText(getString(R.string.write_a_comment));
+    }
+
 
     @Override
     public void onStop() {
