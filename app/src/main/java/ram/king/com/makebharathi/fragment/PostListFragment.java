@@ -31,7 +31,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
@@ -144,7 +143,7 @@ public abstract class PostListFragment extends BaseFragment {
 
                 //getting count of comments
 
-                DatabaseReference postCommentsRef = mDatabase.child("post-comments").child(postRef.getKey());
+                /*DatabaseReference postCommentsRef = mDatabase.child("post-comments").child(postRef.getKey());
                 postCommentsRef.addListenerForSingleValueEvent(
                         new ValueEventListener() {
                             @Override
@@ -164,7 +163,7 @@ public abstract class PostListFragment extends BaseFragment {
                             }
 
                         });
-
+*/
                 /*if (model != null && model.uid.equals(getUid())) {
                     viewHolder.deleteView.setVisibility(View.VISIBLE);
                 } else {
@@ -186,15 +185,28 @@ public abstract class PostListFragment extends BaseFragment {
                 }, new View.OnClickListener() {
                     @Override
                     public void onClick(View moreView) {
-                        onClickMore(moreView, viewHolder, postRef, model, postKey);
+                        onClickMore(moreView, postRef, model);
                     }
                 },  new View.OnClickListener() {
                             @Override
                             public void onClick(View content) {
-                                onClickContent(content, postKey);
+                                onClickContent(postKey, false);
                             }
+                }, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View commentView) {
+                        onClickContent(postKey, true);
+                    }
+                }, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View shareView) {
+                        try {
+                            createShortDynamicLink(Uri.parse(AppConstants.DEEP_LINK_URL + "/" + postKey), 0, viewHolder, model.author, model.title);
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
                         }
-                    );
+                    }
+                });
 
             }
 
@@ -225,14 +237,15 @@ public abstract class PostListFragment extends BaseFragment {
         mRecycler.setAdapter(mAdapter);
     }
 
-    private void onClickContent(View content, String postKey) {
+    private void onClickContent(String postKey, boolean focusComment) {
         // Launch PostDetailActivity
         Intent intent = new Intent(activity, PostDetailActivity.class);
-        intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, postKey);
+        intent.putExtra(AppConstants.EXTRA_POST_KEY, postKey);
+        intent.putExtra(AppConstants.EXTRA_FOCUS_COMMENT, focusComment);
         startActivity(intent);
     }
 
-    private void onClickMore(View moreView, final PostViewHolder viewHolder, final DatabaseReference postRef, final Post model, final String postKey) {
+    private void onClickMore(View moreView, final DatabaseReference postRef, final Post model) {
         PopupMenu popup = new PopupMenu(moreView.getContext(),moreView );
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_card, popup.getMenu());
@@ -276,13 +289,6 @@ public abstract class PostListFragment extends BaseFragment {
                                 }
                             }
                         });
-                        break;
-                    case R.id.menu_share:
-                        try {
-                            createShortDynamicLink(Uri.parse(AppConstants.DEEP_LINK_URL+"/"+postKey), 0, viewHolder,model.author,model.title);
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
                         break;
                     default:
                         return false;

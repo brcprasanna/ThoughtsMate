@@ -82,7 +82,7 @@ public class AppUtil {
                             deepLink = pendingDynamicLinkData.getLink();
                             String postkey = deepLink.toString().substring(deepLink.toString().lastIndexOf('/'));
                             Intent intent = new Intent(context, PostDetailActivity.class);
-                            intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, postkey);
+                            intent.putExtra(AppConstants.EXTRA_POST_KEY, postkey);
                             context.startActivity(intent);
                         }
 

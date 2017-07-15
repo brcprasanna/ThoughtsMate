@@ -4,6 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center_vertical">
+
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/post_author_photo"
         android:layout_width="@dimen/icon_author_width"
@@ -12,27 +13,26 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="2dp"
-        android:src="@drawable/ic_action_account_circle_40"
-        />
+        android:src="@drawable/ic_action_account_circle_40" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_toRightOf="@id/post_author_photo"
-        android:padding="5dp"
-        >
-    <TextView
-        android:id="@+id/post_author"
-        style="@style/Base.TextAppearance.AppCompat.Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:singleLine="true"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        tools:text="someauthor@email.com" />
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/post_author"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="someauthor@email.com" />
 
         <TextView
             android:id="@+id/post_date"
@@ -42,10 +42,9 @@
             android:layout_below="@id/post_author"
             android:layout_marginLeft="5dp"
             android:singleLine="true"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textStyle="bold"
-            tools:text="someauthor@email.com"
-            />
+            tools:text="someauthor@email.com" />
 
     </RelativeLayout>
 

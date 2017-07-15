@@ -36,6 +36,11 @@ import ram.king.com.makebharathi.util.MessageEvent;
 
 
 public class TextEditorActivity extends Activity {
+    public static final String TAG = "TextEditorActvity";
+    String mTitle;
+    String mDedicatedTo;
+    String mCourtesy;
+    String mBackupComposeText;
     /*private static final String BOLD = "<b>Bold</b><br><br>";
     private static final String ITALIT = "<i>Italic</i><br><br>";
     private static final String UNDERLINE = "<u>Underline</u><br><br>";
@@ -47,12 +52,6 @@ public class TextEditorActivity extends Activity {
 */
     private KnifeText knife;
     private DatabaseReference mDatabase;
-    public static final String TAG = "TextEditorActvity";
-
-    String mTitle;
-    String mDedicatedTo;
-    String mCourtesy;
-    String mBackupComposeText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +75,8 @@ public class TextEditorActivity extends Activity {
         setupBold();
         setupItalic();
         setupUnderline();
-        setupStrikethrough();
-        setupBullet();
+        //setupStrikethrough();
+        //setupBullet();
         setupQuote();
         setupLink();
         setupClear();

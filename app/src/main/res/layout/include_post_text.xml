@@ -13,9 +13,9 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textSize="20sp"
-        android:textStyle="bold"
         android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
         tools:text="My First Post" />
 
     <TextView
@@ -23,12 +23,12 @@
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="16sp"
+        android:layout_marginTop="5dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:textColor="@color/black"
+        android:textSize="16sp"
         android:textStyle="italic|bold"
-        android:layout_marginTop="5dp"
         tools:text="Dedicated To" />
 
 
@@ -37,18 +37,16 @@
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:textSize="16sp"
-        android:maxLines="1"
-        android:textStyle="italic|bold"
         android:layout_marginBottom="5dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="italic|bold"
 
         tools:text="Courtesy" />
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/toggleLayout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -56,12 +54,13 @@
 
         <TextView
             android:id="@+id/post_body"
+            style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/lorem"
-            android:textSize="16sp"
+            android:ellipsize="end"
             android:maxLines="8"
-            android:ellipsize="end"/>
+            android:text="@string/lorem"
+            android:textSize="16sp" />
 
         <!-- Optional parameter animation_duration: sets the duration of the expand animation -->
 
