@@ -218,6 +218,12 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                             itemDelete.setVisible(false);
                         }
                     }
+                } else {
+                    mBodyView.setText("This post is removed by the Author");
+                    mDateView.setText("");
+                    mCommentsRecycler.setVisibility(View.GONE);
+                    mCommentButton.setVisibility(View.GONE);
+                    mViewCommentButton.setVisibility(View.GONE);
                 }
             }
 
