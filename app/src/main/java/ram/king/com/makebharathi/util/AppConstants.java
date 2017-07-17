@@ -35,4 +35,10 @@ public class AppConstants {
     public static final String EXTRA_POST_KEY = "post_key";
     public static final String EXTRA_FOCUS_COMMENT = "focus_comment";
 
+    public static final String EXTRA_USER_ID = "user_id";
+    public static final String EXTRA_DISPLAY_NAME = "user_display_name";
+
+    public static final String PREF_USER_POST_QUERY = "pref_user_post_query";
+
+
 }

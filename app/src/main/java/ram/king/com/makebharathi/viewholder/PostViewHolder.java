@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
@@ -36,6 +37,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public ImageButton more;
     public LinearLayout content;
     public TextView commentCountView;
+    public RelativeLayout topUserLayout;
     PrettyTime p;
 
 
@@ -56,6 +58,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         more = (ImageButton) itemView.findViewById(R.id.more);
         content = (LinearLayout) itemView.findViewById(R.id.content_layout);
         commentCountView = (TextView) itemView.findViewById(R.id.comment_count);
+        topUserLayout = (RelativeLayout) itemView.findViewById(R.id.post_author_layout);
         p = new PrettyTime();
 
         titleView.setMaxLines(1);
@@ -63,7 +66,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     public void bindToPost(Post post, View.OnClickListener starClickListener,
                            View.OnClickListener deleteClickListener, View.OnClickListener moreClickListener, View.OnClickListener contentListener,
-                           View.OnClickListener commentListener, View.OnClickListener shareListener) {
+                           View.OnClickListener commentListener, View.OnClickListener shareListener, View.OnClickListener topUserLayoutListener) {
         titleView.setText(post.title);
         authorView.setText(post.author);
 
@@ -95,5 +98,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         content.setOnClickListener(contentListener);
         commentView.setOnClickListener(commentListener);
         share.setOnClickListener(shareListener);
+        topUserLayout.setOnClickListener(topUserLayoutListener);
     }
 }

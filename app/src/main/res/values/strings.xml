@@ -109,7 +109,9 @@
 <string name="heading_my_posts">My Posts</string>
 <string name="heading_my_favourites">My Favourites</string>
 
-<string name ="delete_header">Delete!</string>
+    <string name="heading_all_posts">All Posts from the User</string>
+
+    <string name ="delete_header">Delete!</string>
 <string name ="delete_message">Are you sure you want to delete?</string>
 
 <string name ="no_internet_header">No Internet</string>

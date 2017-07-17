@@ -49,7 +49,9 @@ import java.util.List;
 import java.util.Map;
 
 import ram.king.com.makebharathi.R;
+import ram.king.com.makebharathi.activity.MainActivity;
 import ram.king.com.makebharathi.activity.PostDetailActivity;
+import ram.king.com.makebharathi.activity.UserAllPostActivity;
 import ram.king.com.makebharathi.models.Comment;
 import ram.king.com.makebharathi.models.Post;
 import ram.king.com.makebharathi.util.AppConstants;
@@ -131,6 +133,11 @@ public abstract class PostListFragment extends BaseFragment {
                         startActivity(intent);
                     }
                 });*/
+
+                if (activity instanceof MainActivity)
+                    viewHolder.more.setVisibility(View.VISIBLE);
+                else
+                    viewHolder.more.setVisibility(View.GONE);
 
                 mCommentsReference = FirebaseDatabase.getInstance().getReference()
                         .child("post-comments").child(postKey);
@@ -229,6 +236,17 @@ public abstract class PostListFragment extends BaseFragment {
                             e.printStackTrace();
                         }
                     }
+                }, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View topUserLayoutView) {
+                        if (activity instanceof MainActivity) {
+                            AppUtil.putString(activity, AppConstants.PREF_USER_POST_QUERY, model.uid);
+                            Intent intent = new Intent(activity, UserAllPostActivity.class);
+                            intent.putExtra(AppConstants.EXTRA_DISPLAY_NAME, model.author);
+                            startActivity(intent);
+                        } else
+                            return;
+                    }
                 });
 
             }
@@ -284,12 +302,13 @@ public abstract class PostListFragment extends BaseFragment {
         PopupMenu popup = new PopupMenu(moreView.getContext(),moreView );
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_card, popup.getMenu());
-        MenuItem item = popup.getMenu().findItem(R.id.menu_delete);
+        MenuItem deleteItem = popup.getMenu().findItem(R.id.menu_delete);
+        MenuItem SeeAllPostItem = popup.getMenu().findItem(R.id.menu_see_all_post);
 
         if (model != null && model.uid.equals(getUid())) {
-            item.setVisible(true);
+            deleteItem.setVisible(true);
         } else {
-            item.setVisible(false);
+            deleteItem.setVisible(false);
         }
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -324,6 +343,13 @@ public abstract class PostListFragment extends BaseFragment {
                                 }
                             }
                         });
+                        break;
+                    case R.id.menu_see_all_post:
+                        // Launch PostDetailActivity
+                        AppUtil.putString(activity, AppConstants.PREF_USER_POST_QUERY, model.uid);
+                        Intent intent = new Intent(activity, UserAllPostActivity.class);
+                        intent.putExtra(AppConstants.EXTRA_DISPLAY_NAME, model.author);
+                        startActivity(intent);
                         break;
                     default:
                         return false;
