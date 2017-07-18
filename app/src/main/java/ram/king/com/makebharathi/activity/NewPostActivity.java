@@ -43,25 +43,21 @@ public class NewPostActivity extends BaseActivity {
 
     private static final String TAG = "NewPostActivity";
     private static final String REQUIRED = "Required";
-
-    // [START declare_database_ref]
-    private DatabaseReference mDatabase;
-    // [END declare_database_ref]
-
-    private TextInputEditText mTitleField;
-    private TextInputEditText mDedicatedToField;
-    private TextInputEditText mCourtesyField;
-
     FirebaseListAdapter<User> mAdapter;
-    // List view
-    private ListView lvUsersForDedication;
-    private ListView lvUsersForCourtesy;
+    // [END declare_database_ref]
     // Listview Adapter
     ArrayAdapter<User> usersListAdapterForDedicatedTo;
     ArrayAdapter<User> usersListAdapterForCourtesy;
     // ArrayList for Listview
     ArrayList<User> usersList = new ArrayList<>();
-
+    // [START declare_database_ref]
+    private DatabaseReference mDatabase;
+    private TextInputEditText mTitleField;
+    private TextInputEditText mDedicatedToField;
+    private TextInputEditText mCourtesyField;
+    // List view
+    private ListView lvUsersForDedication;
+    private ListView lvUsersForCourtesy;
     private TextInputLayout mDedicationTextLayout;
     private TextInputLayout mCourtesyTextLayout;
 
@@ -73,6 +69,17 @@ public class NewPostActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
+
+        // Get intent, action and MIME type
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                handleSendText(intent); // Handle text being sent
+            }
+        }
 
         String prefLanguage = AppUtil.getString(this, AppConstants.PREFERRED_LANGUAGE, AppConstants.DEFAULT_LANGUAGE);
         getSupportActionBar().setTitle("New Thought"+" "+"("+prefLanguage+")");
@@ -233,6 +240,10 @@ public class NewPostActivity extends BaseActivity {
 
     }
 
+    private void handleSendText(Intent intent) {
+        mBackupComposeText = intent.getStringExtra(Intent.EXTRA_TEXT);
+    }
+
     private void collectUsers(Map<String,Object> users) {
         //iterate through each user, ignoring their UID
         for (Map.Entry<String, Object> entry : users.entrySet()){
@@ -344,7 +355,6 @@ public class NewPostActivity extends BaseActivity {
 
         // Disable button so there are no multi-posts
         //setEditingEnabled(false);
-
         Intent intent = new Intent(NewPostActivity.this,
                 TextEditorActivity.class);
         intent.putExtra("title", title);
