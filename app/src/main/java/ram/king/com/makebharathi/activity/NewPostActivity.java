@@ -242,6 +242,7 @@ public class NewPostActivity extends BaseActivity {
 
     private void handleSendText(Intent intent) {
         mBackupComposeText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        mBackupComposeText = mBackupComposeText.replace("\n", "<br>");
     }
 
     private void collectUsers(Map<String,Object> users) {

@@ -188,6 +188,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                     } else {
                         mCourtesyView.setVisibility(View.GONE);
                     }
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                         mBodyView.setText(Html.fromHtml(post.body, Html.FROM_HTML_MODE_COMPACT), TextView.BufferType.SPANNABLE);
                     else
