@@ -69,7 +69,7 @@ public class TextEditorActivity extends Activity {
         knife = (KnifeText) findViewById(R.id.knife);
         // ImageGetter coming soon...
         //knife.fromHtml(EXAMPLE);
-        knife.setText(mBackupComposeText);
+        knife.fromHtml(mBackupComposeText);
         knife.setSelection(knife.getEditableText().length());
 
         setupBold();
@@ -301,7 +301,7 @@ public class TextEditorActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        String mBody = knife.getText().toString().trim();
+        String mBody = knife.toHtml();
         if (!TextUtils.isEmpty(mBody)) {
             Intent data = new Intent();
             data.putExtra("ComposeText",mBody);
@@ -311,7 +311,7 @@ public class TextEditorActivity extends Activity {
     }
 
     private void submitPost() {
-        final String mBody = knife.getText().toString().trim();
+        final String mBody = knife.toHtml();
 
         if (TextUtils.isEmpty(mBody))
             return;
