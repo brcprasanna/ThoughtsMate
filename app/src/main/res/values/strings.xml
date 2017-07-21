@@ -144,7 +144,7 @@
     <string name="SLIDE3_TITLE">Post and watch thoughts on your favourite language!!!</string>
     <string name="SLIDE4_TITLE">Let\'s have fun!!!</string>
 
-    <string name="SLIDE1_DESC">Begin your writing journey right here. Post innovative poems, stories, ideas and thoughts, get likes, comments from other ThoughtMates</string>
+    <string name="SLIDE1_DESC">Begin your writing journey right here. Post innovative poems, quotes, stories, ideas and thoughts, get likes, comments from other ThoughtMates</string>
     <string name="SLIDE2_DESC">You can dedicate your thoughts to your loved one and use the add courtesy option if is not not your thought or a copyrighted one</string>
     <string name="SLIDE3_DESC">Filter the thoughts based on your selected language and post your thoughts on your native languages</string>
 
@@ -152,6 +152,8 @@
 
     <string name="view_comments">VIEW COMMENTS</string>
     <string name="write_a_comment">Write a comment</string>
+
+    <string name="terms_conditions">All your post will be moderated by the moderator and have all the rights to edit or remove the content if found inappropriate</string>
 
 
 </resources>
