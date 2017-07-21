@@ -61,7 +61,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         topUserLayout = (RelativeLayout) itemView.findViewById(R.id.post_author_layout);
         p = new PrettyTime();
 
-        titleView.setMaxLines(1);
     }
 
     public void bindToPost(Post post, View.OnClickListener starClickListener,

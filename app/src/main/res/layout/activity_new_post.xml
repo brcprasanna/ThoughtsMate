@@ -29,6 +29,9 @@
         android:layout_height="wrap_content"
         android:hint="Title"
         android:maxLines="3"
+        android:overScrollMode="always"
+        android:scrollbarStyle="insideInset"
+        android:scrollbars="vertical"
         android:singleLine="false" />
     </android.support.design.widget.TextInputLayout>
 
@@ -46,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="16dp"
+
         android:text="@string/plus_dedication"
         />
 
@@ -77,8 +81,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Dedicated to (Optional)"
-
         android:maxLines="2"
+        android:overScrollMode="always"
+        android:scrollbarStyle="insideInset"
+        android:scrollbars="vertical"
         />
 
     </android.support.design.widget.TextInputLayout>
@@ -110,8 +116,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Courtesy (Optional)"
-
         android:maxLines="2"
+        android:overScrollMode="always"
+        android:scrollbarStyle="insideInset"
+        android:scrollbars="vertical"
          />
 
     </android.support.design.widget.TextInputLayout>
