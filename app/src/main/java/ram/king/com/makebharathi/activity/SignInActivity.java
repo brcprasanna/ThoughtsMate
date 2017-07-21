@@ -2,18 +2,13 @@ package ram.king.com.makebharathi.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.appinvite.AppInvite;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -21,8 +16,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthCredential;
@@ -32,8 +25,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 import ram.king.com.makebharathi.R;
 import ram.king.com.makebharathi.models.User;
@@ -168,16 +159,16 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
 
             // Write new user
             if (user.getPhotoUrl() != null && user.getDisplayName() != null)
-                writeNewUser(user.getUid(), username, user.getEmail(),user.getDisplayName(), user.getPhotoUrl().toString());
+                writeNewUser(user.getUid(), username, user.getEmail(), user.getDisplayName(), user.getPhotoUrl().toString());
             else if (user.getDisplayName() != null)
-                writeNewUser(user.getUid(), username, user.getEmail(),user.getDisplayName(), null);
+                writeNewUser(user.getUid(), username, user.getEmail(), user.getDisplayName(), null);
             else
-                writeNewUser(user.getUid(), username, user.getEmail(),username  , null);
+                writeNewUser(user.getUid(), username, user.getEmail(), username, null);
 
             //Redirecting on basis of first time login or not
-            boolean firstTimeLogin = AppUtil.getBoolean(this, AppConstants.FIRST_TIME_LOGIN,true);
+            boolean firstTimeLogin = AppUtil.getBoolean(this, AppConstants.FIRST_TIME_LOGIN, true);
             if (firstTimeLogin)
-                 startActivity(new Intent(SignInActivity.this, AppIntroActivity.class));
+                startActivity(new Intent(SignInActivity.this, AppIntroActivity.class));
             else
                 startActivity(new Intent(SignInActivity.this, MainActivity.class));
             finish();
@@ -224,26 +215,49 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if (i == R.id.button_gmail_sign_in)
-        {
-            if (AppUtil.isInternetConnected(this))
-                gmailSignIn();
-            else
-            {
-                new AlertDialog.Builder(this)
-                        .setTitle(getResources().getString(R.string.no_internet_header))
-                        .setMessage(getResources().getString(R.string.no_internet_message))
-                        .setCancelable(false)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
+        if (i == R.id.button_gmail_sign_in) {
+            if (AppUtil.isInternetConnected(this)) {
+                boolean termsAgreed = AppUtil.getBoolean(this, AppConstants.TERMS_AGREED, false);
+                if (!termsAgreed) {
+                    this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!isFinishing()) {
+                                new AlertDialog.Builder(SignInActivity.this)
+                                        .setMessage(getResources().getString(R.string.terms_conditions))
+                                        .setCancelable(false)
+                                        .setPositiveButton("I Agree", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                AppUtil.putBoolean(SignInActivity.this, AppConstants.TERMS_AGREED, true);
+                                                gmailSignIn();
+                                            }
+                                        }).setNegativeButton("I do not Agree", null).show();
                             }
-                        }).show();
+                        }
+                    });
+                } else {
+                    gmailSignIn();
+                }
+            } else {
+                showNoInternetConnectionDialog();
             }
         }
-
     }
+
+    private void showNoInternetConnectionDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.no_internet_header))
+                .setMessage(getResources().getString(R.string.no_internet_message))
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+    }
+
 
     private void gmailSignIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
