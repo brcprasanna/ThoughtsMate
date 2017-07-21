@@ -2,24 +2,47 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:fitsSystemWindows="true"
-    android:background="@color/white">
+    android:background="@color/colorAccent"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="86dp"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
-        android:layout_gravity="center_horizontal"
-        >
+        android:paddingTop="86dp">
 
-        <ImageView android:src="@drawable/ic_launcher"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="72dp"
-            android:layout_marginBottom="24dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_launcher" />
+
+        <TextView
+            android:id="@+id/tv_app_name"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="24dp"
+            android:text="ThoughtsMate"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:textStyle="bold|italic" />
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="24dp"
+            android:text="Log In / Sign Up"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/button_gmail_sign_in"
@@ -28,7 +51,6 @@
             android:layout_gravity="center_horizontal"
             android:visibility="visible"
             />
-
 
     </LinearLayout>
 </ScrollView>
