@@ -21,15 +21,6 @@ public class AppConstants {
     public static final String FIRST_TIME_LOGIN = "FIRST_TIME_LOGIN";
     public static final String TERMS_AGREED = "TERMS AGREED";
 
-    public static final String SLIDE1_TITLE = "Unleash your limitless thoughts!";
-    public static final String SLIDE2_TITLE = "Dedicate to your loved one!";
-    public static final String SLIDE3_TITLE = "Post and watch thoughts on your favourite language!";
-
-    public static final String SLIDE1_DESC = "Begin your writing journey right here. Post innovative poems, stories, ideas and thoughts, get likes, comments from other ThoughtMates";
-    public static final String SLIDE2_DESC = "You can dedicate your thoughts to your loved one and use the add courtesy option if is not not your thought or a copyrighted one";
-    public static final String SLIDE3_DESC = "Filter and watch the thoughts based on the selected language and post your thoughts on your native languages";
-
-
     public static final String DEEP_LINK_URL = "https://brcprasanna.wixsite.com/thoughtsmate-postid";
     public static final String DEEP_LINK_SOCIAL_DETAILS  = "&st=ThoughtsMate&si=https://static.wixstatic.com/media/5227b1_0baa4b32227c486d9d868e83a3bf5f2e~mv2.png/v1/fill/w_132,h_132,al_c,usm_0.66_1.00_0.01/5227b1_0baa4b32227c486d9d868e83a3bf5f2e~mv2.png";
 
