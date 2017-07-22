@@ -226,13 +226,13 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                                 new AlertDialog.Builder(SignInActivity.this)
                                         .setMessage(getResources().getString(R.string.terms_conditions))
                                         .setCancelable(false)
-                                        .setPositiveButton("I Agree", new DialogInterface.OnClickListener() {
+                                        .setPositiveButton("Agree", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 AppUtil.putBoolean(SignInActivity.this, AppConstants.TERMS_AGREED, true);
                                                 gmailSignIn();
                                             }
-                                        }).setNegativeButton("I do not Agree", null).show();
+                                        }).setNegativeButton("Do not Agree", null).show();
                             }
                         }
                     });
