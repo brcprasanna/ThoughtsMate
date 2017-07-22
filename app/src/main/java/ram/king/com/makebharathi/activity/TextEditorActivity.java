@@ -302,12 +302,16 @@ public class TextEditorActivity extends Activity {
     @Override
     public void onBackPressed() {
         String mBody = knife.toHtml();
-        if (!TextUtils.isEmpty(mBody)) {
-            Intent data = new Intent();
+        Intent data = new Intent();
+
+        if (!TextUtils.isEmpty(mBody))
             data.putExtra("ComposeText",mBody);
-            setResult(RESULT_OK, data);
-            finish();
-        }
+        else
+            data.putExtra("ComposeText", "");
+
+        setResult(RESULT_OK, data);
+        finish();
+
     }
 
     private void submitPost() {
