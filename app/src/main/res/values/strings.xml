@@ -85,7 +85,7 @@
     <string name="plus_language">+ Language</string>
     <string name="minus_language">- Language</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <color name="deep_purple">#4527A0</color>
 
     <string-array name="nav_drawer_items">
@@ -139,9 +139,9 @@
     <string name="toast_insert_link">Insert link</string>
     <string name="toast_format_clear">Format clear</string>
 
-    <string name="SLIDE1_TITLE">Unleash your limitless thoughts!!!</string>
-    <string name="SLIDE2_TITLE">Dedicate to your loved one!!!</string>
-    <string name="SLIDE3_TITLE">Post and watch thoughts on your favourite language!!!</string>
+    <string name="SLIDE1_TITLE">A Perfect Poem writer</string>
+    <string name="SLIDE2_TITLE">Dedicate your post</string>
+    <string name="SLIDE3_TITLE">Post and watch thoughts on your favourite language</string>
     <string name="SLIDE4_TITLE">Let\'s have fun!!!</string>
 
     <string name="SLIDE1_DESC">Begin your writing journey right here. Post innovative poems, quotes, stories, ideas and thoughts, get likes, comments from other ThoughtMates</string>
