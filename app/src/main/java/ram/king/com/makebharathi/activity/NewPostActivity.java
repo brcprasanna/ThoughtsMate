@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
@@ -61,9 +60,9 @@ public class NewPostActivity extends BaseActivity {
     private TextInputLayout mDedicationTextLayout;
     private TextInputLayout mCourtesyTextLayout;
 
-    private Button mDedicationButton;
+    /*private Button mDedicationButton;
     private Button mCourtesyButton;
-
+*/
     private String mBackupComposeText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,13 +113,13 @@ public class NewPostActivity extends BaseActivity {
         mDedicatedToField = (TextInputEditText) findViewById(R.id.field_dedicated_to);
         mCourtesyField = (TextInputEditText) findViewById(R.id.field_courtesy);
 
-        mDedicationButton = (Button) findViewById(R.id.button_dedication);
-        mCourtesyButton = (Button) findViewById(R.id.button_courtesy);
+        // mDedicationButton = (Button) findViewById(R.id.button_dedication);
+        // mCourtesyButton = (Button) findViewById(R.id.button_courtesy);
 
         mDedicationTextLayout = (TextInputLayout) findViewById(R.id.textLayoutDedicateTo);
         mCourtesyTextLayout = (TextInputLayout) findViewById(R.id.textLayoutCourtesy);
 
-        mDedicationButton.setOnClickListener(new View.OnClickListener() {
+        /*mDedicationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mDedicationButton.getText().toString().startsWith("+")) {
@@ -155,7 +154,7 @@ public class NewPostActivity extends BaseActivity {
                 }
             }
         });
-
+*/
         mDedicatedToField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean isFocussed) {
