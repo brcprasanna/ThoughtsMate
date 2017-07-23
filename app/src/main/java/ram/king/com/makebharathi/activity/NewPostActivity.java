@@ -126,11 +126,14 @@ public class NewPostActivity extends BaseActivity {
                 if (mDedicationButton.getText().toString().startsWith("+")) {
                     mDedicationButton.setText(R.string.minus_dedication);
                     mDedicationTextLayout.setVisibility(View.VISIBLE);
+                    mDedicatedToField.requestFocus();
                     mDedicatedToField.setText("");
+                    lvUsersForCourtesy.setVisibility(View.GONE);
                 }
                 else {
                     mDedicationButton.setText(R.string.plus_dedication);
                     mDedicationTextLayout.setVisibility(View.GONE);
+                    lvUsersForCourtesy.setVisibility(View.GONE);
                 }
             }
         });
@@ -141,11 +144,14 @@ public class NewPostActivity extends BaseActivity {
                 if (mCourtesyButton.getText().toString().startsWith("+")) {
                     mCourtesyButton.setText(R.string.minus_courtesy);
                     mCourtesyTextLayout.setVisibility(View.VISIBLE);
+                    mCourtesyField.requestFocus();
                     mCourtesyField.setText("");
+                    lvUsersForDedication.setVisibility(View.GONE);
                 }
                 else {
                     mCourtesyButton.setText(R.string.plus_courtesy);
                     mCourtesyTextLayout.setVisibility(View.GONE);
+                    lvUsersForDedication.setVisibility(View.GONE);
                 }
             }
         });
