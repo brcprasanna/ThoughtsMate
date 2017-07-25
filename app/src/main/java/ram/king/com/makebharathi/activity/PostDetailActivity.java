@@ -48,6 +48,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import hotchemi.android.rate.AppRate;
+import hotchemi.android.rate.OnClickButtonListener;
 import ram.king.com.makebharathi.R;
 import ram.king.com.makebharathi.models.Comment;
 import ram.king.com.makebharathi.models.Post;
@@ -137,7 +139,23 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
             }
         });
 
+        AppRate.with(this)
+                .setInstallDays(0) // default 10, 0 means install day.
+                .setLaunchTimes(3) // default 10
+                .setRemindInterval(2) // default 1
+                .setShowLaterButton(true) // default true
+                .setDebug(false) // default false
+                .setMessage("if you enjoy using this app, please take a moment to rate it. Thanks for your support!")
+                .setOnClickButtonListener(new OnClickButtonListener() { // callback listener.
+                    @Override
+                    public void onClickButton(int which) {
+                        Log.d(MainActivity.class.getName(), Integer.toString(which));
+                    }
+                })
+                .monitor();
 
+        // Show a dialog if meets conditions
+        AppRate.showRateDialogIfMeetsConditions(this);
     }
 
     private void toggleComment(boolean mSwitch) {
@@ -175,7 +193,14 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                             .into(mAuthorPhoto);
 
                     mAuthorView.setText(post.author);
-                    mTitleView.setText(post.title);
+
+                    if (!TextUtils.isEmpty(post.title)) {
+                        mTitleView.setVisibility(View.VISIBLE);
+                        mTitleView.setText(post.title);
+                    } else {
+                        mTitleView.setVisibility(View.GONE);
+                    }
+
                     if (!TextUtils.isEmpty(post.dedicatedTo)) {
                         mDedicatedToView.setVisibility(View.VISIBLE);
                         mDedicatedToView.setText("Dedicated To : " + post.dedicatedTo);

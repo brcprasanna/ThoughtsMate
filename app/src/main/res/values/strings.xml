@@ -153,7 +153,7 @@
     <string name="view_comments">VIEW COMMENTS</string>
     <string name="write_a_comment">Write a comment</string>
 
-    <string name="terms_conditions">All your post will be moderated by the moderator and have all the rights to edit or remove the content if found inappropriate</string>
+    <string name="terms_conditions">All your post and comments will be moderated by the moderator and have all the rights to edit or remove the content if found inappropriate</string>
 
 
 </resources>

@@ -66,7 +66,13 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public void bindToPost(Post post, View.OnClickListener starClickListener,
                            View.OnClickListener deleteClickListener, View.OnClickListener moreClickListener, View.OnClickListener contentListener,
                            View.OnClickListener commentListener, View.OnClickListener shareListener, View.OnClickListener topUserLayoutListener) {
-        titleView.setText(post.title);
+        if (!TextUtils.isEmpty(post.title)) {
+            titleView.setVisibility(View.VISIBLE);
+            titleView.setText(post.title);
+        } else {
+            titleView.setVisibility(View.GONE);
+        }
+
         authorView.setText(post.author);
 
         long yourmilliseconds = (long) post.timestamp;

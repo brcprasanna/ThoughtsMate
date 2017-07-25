@@ -342,8 +342,9 @@ public class NewPostActivity extends BaseActivity {
 
         // Title is required
         if (TextUtils.isEmpty(title)) {
-            mTitleField.setError(REQUIRED);
-            return;
+            //mTitleField.setError(REQUIRED);
+            //return;
+            mTitleField.setText("");
         }
 
         if (TextUtils.isEmpty(dedicatedTo)) {

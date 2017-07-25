@@ -27,7 +27,7 @@
         android:id="@+id/field_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Title"
+        android:hint="Title (Optional)"
         android:maxLines="3"
         android:overScrollMode="always"
         android:scrollbarStyle="insideInset"
