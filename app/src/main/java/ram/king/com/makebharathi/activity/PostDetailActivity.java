@@ -140,7 +140,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         });
 
         AppRate.with(this)
-                .setInstallDays(0) // default 10, 0 means install day.
+                .setInstallDays(1) // default 10, 0 means install day.
                 .setLaunchTimes(3) // default 10
                 .setRemindInterval(2) // default 1
                 .setShowLaterButton(true) // default true
