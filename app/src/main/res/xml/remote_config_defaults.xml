@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><!-- START xml_defaults -->
+<defaultsMap>
+    <entry>
+        <key>appversion</key>
+        <value>1.0</value>
+    </entry>
+    <entry>
+        <key>limittolast</key>
+        <value>400</value>
+    </entry>
+</defaultsMap><!-- END xml_defaults -->

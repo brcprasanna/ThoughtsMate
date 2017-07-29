@@ -33,4 +33,9 @@ public class AppConstants {
     public static final String PREF_USER_POST_QUERY = "pref_user_post_query";
 
 
+    public static final String APP_VERSION = "appversion";
+    public static final String QUERY_LIMIT_TO_LAST = "limit_to_last";
+    public static final String USE_LIMIT_TO_LAST = "use_limit_to_last";
+    public static final String DEFAULT_LIMIT_TO_LAST = "400";
+    public static final boolean DEFAULT_USE_LIMIT_TO_LAST = false;
 }
