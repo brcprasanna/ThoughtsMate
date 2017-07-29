@@ -156,4 +156,7 @@
     <string name="terms_conditions">All your post and comments will be moderated by the moderator and have all the rights to edit or remove the content if found inappropriate</string>
 
 
+    <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="real_interstitial_ad_unit_id">ca-app-pub-2679883314308328/3975651699</string>
+
 </resources>
