@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -165,6 +164,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
 
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
+
         mAdView.loadAd(adRequest);
 
     }
@@ -210,10 +210,10 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         super.onDestroy();
     }
 
-    @VisibleForTesting
-    AdView getAdView() {
-        return mAdView;
-    }
+    //@VisibleForTesting
+    //AdView getAdView() {
+    //   return mAdView;
+    // }
 
     @Override
     public void onStart() {
