@@ -84,7 +84,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         FirebaseAnalytics.getInstance(this);
-        AppUtil.getDynamicLink(this);
+        //AppUtil.getDynamicLink(this);
     }
 
     @Override
@@ -164,6 +164,8 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                 writeNewUser(user.getUid(), username, user.getEmail(), user.getDisplayName(), null);
             else
                 writeNewUser(user.getUid(), username, user.getEmail(), username, null);
+
+            AppUtil.getDynamicLink(this);
 
             //Redirecting on basis of first time login or not
             boolean firstTimeLogin = AppUtil.getBoolean(this, AppConstants.FIRST_TIME_LOGIN, true);
