@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="8dp"
     tools:context="ram.king.com.makebharathi.activity.PostDetailActivity">
 
     <com.google.android.gms.ads.AdView
@@ -27,16 +28,25 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+
+        <RelativeLayout
+            android:id="@+id/post_author_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_border"
+            android:padding="10dp">
     <include
-        android:id="@+id/post_author_layout"
         layout="@layout/include_post_author_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true" />
 
-    <include
+        </RelativeLayout>
+
+        <include
         android:id="@+id/post_text_layout"
         layout="@layout/include_post_text_detail"
         android:layout_width="wrap_content"

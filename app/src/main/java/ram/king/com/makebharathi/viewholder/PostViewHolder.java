@@ -68,7 +68,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                            View.OnClickListener commentListener, View.OnClickListener shareListener, View.OnClickListener topUserLayoutListener) {
         if (!TextUtils.isEmpty(post.title)) {
             titleView.setVisibility(View.VISIBLE);
-            titleView.setText(post.title);
+            titleView.setText("Title : " + post.title);
         } else {
             titleView.setVisibility(View.GONE);
         }

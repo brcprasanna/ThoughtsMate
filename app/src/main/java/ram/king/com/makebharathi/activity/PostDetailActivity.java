@@ -234,7 +234,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
 
                     if (!TextUtils.isEmpty(post.title)) {
                         mTitleView.setVisibility(View.VISIBLE);
-                        mTitleView.setText(post.title);
+                        mTitleView.setText("Title : " + post.title);
                     } else {
                         mTitleView.setVisibility(View.GONE);
                     }
