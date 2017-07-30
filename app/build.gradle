@@ -13,8 +13,8 @@ android {
         applicationId "ram.king.com.makebharathi"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.2"
 
     }
     buildTypes {
@@ -30,7 +30,7 @@ android {
 
             // TODO(developer): Replace this with your app code
             //                  See: https://firebase.google.com/docs/dynamic-links/android/create#set-up-firebase-and-the-dynamic-links-sdk
-            resValue "string", "app_code", "gg6f2"
+            resValue "string", "app_code", "jae3w"
         }
     }
 

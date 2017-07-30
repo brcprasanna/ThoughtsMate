@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -68,7 +67,7 @@ public class TextEditorActivity extends Activity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         knife = (KnifeText) findViewById(R.id.knife);
-        knife.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        //knife.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
         // ImageGetter coming soon...
         //knife.fromHtml(EXAMPLE);

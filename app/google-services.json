@@ -1,21 +1,29 @@
 {
   "project_info": {
-    "project_number": "833106596661",
-    "firebase_url": "https://make-bharathi-app.firebaseio.com",
-    "project_id": "make-bharathi-app",
-    "storage_bucket": "make-bharathi-app.appspot.com"
+    "project_number": "582124109866",
+    "firebase_url": "https://thoughtsmaterelease.firebaseio.com",
+    "project_id": "thoughtsmaterelease",
+    "storage_bucket": "thoughtsmaterelease.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:833106596661:android:dd356ead2e2c5aa6",
+        "mobilesdk_app_id": "1:582124109866:android:dd356ead2e2c5aa6",
         "android_client_info": {
           "package_name": "ram.king.com.makebharathi"
         }
       },
       "oauth_client": [
         {
-          "client_id": "833106596661-c1c8oqlu05amqufo9vhpq8nvdutvgv0s.apps.googleusercontent.com",
+          "client_id": "582124109866-m1r4o10nfeo8mgp35qu0nbml5r9vf00n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ram.king.com.makebharathi",
+            "certificate_hash": "dadd2bd11d3306572dd3b6ed479630bb6000b552"
+          }
+        },
+        {
+          "client_id": "582124109866-eabcjmrkdn3lpaicbc1br6lnjdqd4n0h.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "ram.king.com.makebharathi",
@@ -23,13 +31,13 @@
           }
         },
         {
-          "client_id": "833106596661-ki3vrp0keergni5orce0va7lfkq3coqm.apps.googleusercontent.com",
+          "client_id": "582124109866-k8fiol93bqi4q6km0ljc4jin9aumsrll.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBQrF6EmuIRFVpWGf9max2eQwjyevZAYlk"
+          "current_key": "AIzaSyAlUcCC3IOA3GsYS1Y3LNz3SZKdtU9or6Q"
         }
       ],
       "services": {
@@ -40,7 +48,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "833106596661-ki3vrp0keergni5orce0va7lfkq3coqm.apps.googleusercontent.com",
+              "client_id": "582124109866-k8fiol93bqi4q6km0ljc4jin9aumsrll.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
