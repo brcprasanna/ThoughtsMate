@@ -23,9 +23,6 @@ import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -68,7 +65,6 @@ public abstract class PostListFragment extends BaseFragment {
     SharedPreferences sharedPref;
     // [END define_database_reference]
     String preferredLanguage;
-    Intent postDetailintent;
     // [START define_database_reference]
     private DatabaseReference mDatabase;
     private FirebaseRecyclerAdapter<Post, PostViewHolder> mAdapter;
@@ -78,7 +74,7 @@ public abstract class PostListFragment extends BaseFragment {
     private List<String> mCommentIds = new ArrayList<>();
     private List<Comment> mComments = new ArrayList<>();
     private DatabaseReference mCommentsReference;
-    private InterstitialAd mInterstitialAd;
+    // private InterstitialAd mInterstitialAd;
 
     public PostListFragment() {}
 
@@ -116,9 +112,9 @@ public abstract class PostListFragment extends BaseFragment {
         // Set up FirebaseRecyclerAdapter with the Query
         setupAdapterWithQuery();
 
-        //Ad mob
+        /*//Ad mob
         mInterstitialAd = new InterstitialAd(activity);
-        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+        mInterstitialAd.setAdUnitId(getString(R.string.real_interstitial_ad_unit_id));
         // [END instantiate_interstitial_ad]
 
         // [START create_interstitial_ad_listener]
@@ -133,9 +129,9 @@ public abstract class PostListFragment extends BaseFragment {
             public void onAdLoaded() {
                 // Ad received, ready to display
                 // [START_EXCLUDE]
-                /*if (mLoadInterstitialButton != null) {
+                *//*if (mLoadInterstitialButton != null) {
                     mLoadInterstitialButton.setEnabled(true);
-                }*/
+                }*//*
                 // [END_EXCLUDE]
             }
 
@@ -144,19 +140,19 @@ public abstract class PostListFragment extends BaseFragment {
                 // See https://goo.gl/sCZj0H for possible error codes.
                 Log.w(TAG, "onAdFailedToLoad:" + i);
             }
-        });
+        });*/
     }
 
     /**
      * Load a new interstitial ad asynchronously.
      */
     // [START request_new_interstitial]
-    private void requestNewInterstitial() {
+    /*private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
                 .build();
 
         mInterstitialAd.loadAd(adRequest);
-    }
+    }*/
     // [END request_new_interstitial]
 
 
@@ -340,18 +336,9 @@ public abstract class PostListFragment extends BaseFragment {
 
     private void onClickContent(String postKey, boolean focusComment) {
         // Launch PostDetailActivity
-        postDetailintent = new Intent(activity, PostDetailActivity.class);
+        Intent postDetailintent = new Intent(activity, PostDetailActivity.class);
         postDetailintent.putExtra(AppConstants.EXTRA_POST_KEY, postKey);
         postDetailintent.putExtra(AppConstants.EXTRA_FOCUS_COMMENT, focusComment);
-
-        if (mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        } else {
-            startDetailActivity();
-        }
-    }
-
-    private void startDetailActivity() {
         startActivity(postDetailintent);
     }
 
@@ -549,10 +536,6 @@ public abstract class PostListFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!mInterstitialAd.isLoaded()) {
-            requestNewInterstitial();
-        }
-
     }
 
     // [START post_stars_transaction]
