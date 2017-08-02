@@ -94,8 +94,12 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             courtesy.setVisibility(View.GONE);
         }
 
-        if (post.starCount > 0)
+        if (post.starCount > 0) {
+            numStarsView.setVisibility(View.VISIBLE);
             numStarsView.setText(String.valueOf(post.starCount));
+        } else
+            numStarsView.setVisibility(View.GONE);
+
         bodyView.setText(Html.fromHtml(post.body), TextView.BufferType.SPANNABLE);
         starView.setOnClickListener(starClickListener);
         deleteView.setOnClickListener(deleteClickListener);

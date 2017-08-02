@@ -341,8 +341,12 @@ public abstract class PostListFragment extends BaseFragment {
                 count++;
             }
         }
-        if (count > 0)
+        if (count > 0) {
+            viewHolder.commentCountView.setVisibility(View.VISIBLE);
             viewHolder.commentCountView.setText(String.valueOf(count));
+        } else {
+            viewHolder.commentCountView.setVisibility(View.GONE);
+        }
     }
 
 
