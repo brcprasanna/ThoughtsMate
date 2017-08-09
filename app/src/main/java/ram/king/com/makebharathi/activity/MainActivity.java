@@ -221,6 +221,7 @@ public class MainActivity extends BaseActivity {
             return true;
         } else if (i == R.id.action_choose_lang) {
             buildLangDialogList();
+
             return true;
         }
         else
