@@ -348,7 +348,7 @@ public abstract class PostListFragment extends BaseFragment {
                     UserForLikes user = new UserForLikes();
                     user.displayName = (String) userMapValue.get("displayName");
                     user.photoUrl = (String) userMapValue.get("photoUrl");
-                    user.uID = post.uid;
+                    user.uID = key;
                     usersList.add(user);
                 }
             }
