@@ -43,6 +43,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,6 +57,7 @@ import ram.king.com.makebharathi.R;
 import ram.king.com.makebharathi.models.Comment;
 import ram.king.com.makebharathi.models.Post;
 import ram.king.com.makebharathi.models.User;
+import ram.king.com.makebharathi.models.UserForLikes;
 import ram.king.com.makebharathi.util.AppConstants;
 
 public class PostDetailActivity extends BaseActivity implements View.OnClickListener {
@@ -63,6 +65,8 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     private static final String TAG = "PostDetailActivity";
     PrettyTime prettyTime;
     Post post;
+    Map<String, Object> usersMap;
+    ArrayList<UserForLikes> usersList = new ArrayList<>();
     private DatabaseReference mPostReference;
     private DatabaseReference mCommentsReference;
     private ValueEventListener mPostListener;
@@ -82,9 +86,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     private DatabaseReference mDatabase;
     private Menu menu;
     private Button mViewCommentButton;
-
     private AdView mAdView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +169,27 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
 
         mAdView.loadAd(adRequest);
 
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
+        ref.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        //Get map of users in datasnapshot
+                        collectUsers((Map<String, Object>) dataSnapshot.getValue());
+                        //NewPostActivity.this.usersListAdapterForDedicatedTo.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //handle databaseError
+                    }
+                });
+
+    }
+
+    private void collectUsers(Map<String, Object> users) {
+        //iterate through each user, ignoring their UID
+        usersMap = users;
     }
 
     @Override
@@ -274,6 +297,13 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
 
                         if (post != null) {
                             itemLikeNum.setTitle(String.valueOf(post.starCount));
+                            itemLikeNum.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(MenuItem menuItem) {
+                                    collectLikeUsers(post);
+                                    return false;
+                                }
+                            });
                         }
 
                         if (post != null && post.uid.equals(getUid())) {
@@ -388,6 +418,27 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
 
     }
 
+    private void collectLikeUsers(Post post) {
+        usersList = new ArrayList<>();
+        if (usersMap != null) {
+            for (String key : post.stars.keySet()) {
+                if (usersMap.keySet().contains(key)) {
+                    Map userMapValue = (Map) usersMap.get(key);
+                    UserForLikes user = new UserForLikes();
+                    user.displayName = (String) userMapValue.get("displayName");
+                    user.photoUrl = (String) userMapValue.get("photoUrl");
+                    user.uID = key;
+                    usersList.add(user);
+                }
+            }
+            if (usersList.size() > 0) {
+                Intent likesListIntent = new Intent(this, LikesListUsersActivity.class);
+                likesListIntent.putExtra(AppConstants.LIKES_LIST, (Serializable) usersList);
+                startActivity(likesListIntent);
+            }
+        }
+    }
+
     private void setCommentCount(Map<String, Object> value) {
         int count = 0;
         if (value != null) {
@@ -480,8 +531,17 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
             itemLike.setIcon(R.drawable.ic_favorite_border_white_24dp);
         }
 
-        if (post != null)
+        if (post != null) {
             itemLikeNum.setTitle(String.valueOf(post.starCount));
+            itemLikeNum.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    collectLikeUsers(post);
+                    return false;
+                }
+            });
+
+        }
 
 
         if (post != null && post.uid.equals(getUid())) {
