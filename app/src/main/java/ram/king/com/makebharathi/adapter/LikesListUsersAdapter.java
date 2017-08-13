@@ -14,13 +14,12 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import java.util.List;
 
 import ram.king.com.makebharathi.R;
-import ram.king.com.makebharathi.models.User;
+import ram.king.com.makebharathi.models.UserForLikes;
 
-public class LikesListUsersAdapter extends ArrayAdapter<User> {
+public class LikesListUsersAdapter extends ArrayAdapter<UserForLikes> {
 
-    private List<User> planetList;
 
-    public LikesListUsersAdapter(Context context, int resource, List<User> objects) {
+    public LikesListUsersAdapter(Context context, int resource, List<UserForLikes> objects) {
         super(context, resource, objects);
     }
 
@@ -35,7 +34,7 @@ public class LikesListUsersAdapter extends ArrayAdapter<User> {
             view = layoutInflater.inflate(R.layout.list_users, null);
         }
 
-        final User user = getItem(position);
+        final UserForLikes user = getItem(position);
         if (user != null) {
             //image
             CircularImageView photo = (CircularImageView) view.findViewById(R.id.user_photo);

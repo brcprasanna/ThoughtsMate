@@ -31,6 +31,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/button_star"
             android:paddingLeft="12dp"
+            android:paddingRight="12dp"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
             android:textStyle="bold"

@@ -33,6 +33,7 @@
         <activity
             android:name=".activity.UserAllPostActivity"
             android:label="@string/app_name"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme">
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,12 +48,15 @@
 
         <activity
             android:name=".activity.LikesListUsersActivity"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.Design.Light.NoActionBar" />
 
 
         <activity android:name=".activity.NewPostActivity"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden">
+
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />

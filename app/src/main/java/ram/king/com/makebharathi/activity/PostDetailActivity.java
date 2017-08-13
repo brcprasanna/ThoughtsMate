@@ -471,6 +471,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         getMenuInflater().inflate(R.menu.menu_detail, menu);
         MenuItem itemLike = menu.findItem(R.id.menu_like);
         MenuItem itemLikeNum = menu.findItem(R.id.menu_like_num);
+
         MenuItem itemDelete = menu.findItem(R.id.menu_delete);
 
         if (post != null && post.stars.containsKey(getUid())) {

@@ -56,7 +56,7 @@ import ram.king.com.makebharathi.activity.PostDetailActivity;
 import ram.king.com.makebharathi.activity.UserAllPostActivity;
 import ram.king.com.makebharathi.models.Comment;
 import ram.king.com.makebharathi.models.Post;
-import ram.king.com.makebharathi.models.User;
+import ram.king.com.makebharathi.models.UserForLikes;
 import ram.king.com.makebharathi.util.AppConstants;
 import ram.king.com.makebharathi.util.AppUtil;
 import ram.king.com.makebharathi.util.MessageEvent;
@@ -69,7 +69,7 @@ public abstract class PostListFragment extends BaseFragment {
     // [END define_database_reference]
     String preferredLanguage;
     Intent userAllPostIntent;
-    ArrayList<User> usersList = new ArrayList<>();
+    ArrayList<UserForLikes> usersList = new ArrayList<>();
     Map<String, Object> usersMap;
     // [START define_database_reference]
     private DatabaseReference mDatabase;
@@ -257,7 +257,7 @@ public abstract class PostListFragment extends BaseFragment {
 
                         });
 */
-                /*if (model != null && model.uid.equals(getUid())) {
+                /*if (model != null && model.uid.equals(getuID())) {
                     viewHolder.deleteView.setVisibility(View.VISIBLE);
                 } else {
                     viewHolder.deleteView.setVisibility(View.GONE);
@@ -345,9 +345,10 @@ public abstract class PostListFragment extends BaseFragment {
             for (String key : post.stars.keySet()) {
                 if (usersMap.keySet().contains(key)) {
                     Map userMapValue = (Map) usersMap.get(key);
-                    User user = new User();
+                    UserForLikes user = new UserForLikes();
                     user.displayName = (String) userMapValue.get("displayName");
                     user.photoUrl = (String) userMapValue.get("photoUrl");
+                    user.uID = post.uid;
                     usersList.add(user);
                 }
             }
