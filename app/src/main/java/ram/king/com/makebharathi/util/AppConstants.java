@@ -38,4 +38,6 @@ public class AppConstants {
     public static final String USE_LIMIT_TO_LAST = "use_limit_to_last";
     public static final String DEFAULT_LIMIT_TO_LAST = "400";
     public static final boolean DEFAULT_USE_LIMIT_TO_LAST = false;
+
+    public static final String LIKES_LIST = "LIKES_LIST";
 }

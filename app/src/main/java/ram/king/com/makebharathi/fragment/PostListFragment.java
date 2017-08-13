@@ -23,9 +23,6 @@ import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,6 +42,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,11 +50,13 @@ import java.util.List;
 import java.util.Map;
 
 import ram.king.com.makebharathi.R;
+import ram.king.com.makebharathi.activity.LikesListUsersActivity;
 import ram.king.com.makebharathi.activity.MainActivity;
 import ram.king.com.makebharathi.activity.PostDetailActivity;
 import ram.king.com.makebharathi.activity.UserAllPostActivity;
 import ram.king.com.makebharathi.models.Comment;
 import ram.king.com.makebharathi.models.Post;
+import ram.king.com.makebharathi.models.User;
 import ram.king.com.makebharathi.util.AppConstants;
 import ram.king.com.makebharathi.util.AppUtil;
 import ram.king.com.makebharathi.util.MessageEvent;
@@ -69,6 +69,8 @@ public abstract class PostListFragment extends BaseFragment {
     // [END define_database_reference]
     String preferredLanguage;
     Intent userAllPostIntent;
+    ArrayList<User> usersList = new ArrayList<>();
+    Map<String, Object> usersMap;
     // [START define_database_reference]
     private DatabaseReference mDatabase;
     private FirebaseRecyclerAdapter<Post, PostViewHolder> mAdapter;
@@ -76,9 +78,9 @@ public abstract class PostListFragment extends BaseFragment {
     private LinearLayoutManager mManager;
     private ProgressBar mProgressBar;
     private List<String> mCommentIds = new ArrayList<>();
+    //private InterstitialAd mInterstitialAd;
     private List<Comment> mComments = new ArrayList<>();
     private DatabaseReference mCommentsReference;
-    private InterstitialAd mInterstitialAd;
 
     public PostListFragment() {}
 
@@ -91,17 +93,12 @@ public abstract class PostListFragment extends BaseFragment {
         // [START create_database_reference]
         mDatabase = FirebaseDatabase.getInstance().getReference();
         // [END create_database_reference]
-
         mRecycler = (RecyclerView) rootView.findViewById(R.id.messages_list);
         mRecycler.setHasFixedSize(true);
 
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
         return rootView;
     }
-
-
-
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -113,16 +110,31 @@ public abstract class PostListFragment extends BaseFragment {
         mManager.setStackFromEnd(true);
         mRecycler.setLayoutManager(mManager);
 
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
+        ref.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        //Get map of users in datasnapshot
+                        collectUsers((Map<String, Object>) dataSnapshot.getValue());
+                        //NewPostActivity.this.usersListAdapterForDedicatedTo.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //handle databaseError
+                    }
+                });
         // Set up FirebaseRecyclerAdapter with the Query
         setupAdapterWithQuery();
 
         //Ad mob
-        mInterstitialAd = new InterstitialAd(activity);
-        mInterstitialAd.setAdUnitId(getString(R.string.real_interstitial_ad_unit_id));
+        // mInterstitialAd = new InterstitialAd(activity);
+        // mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
         // [END instantiate_interstitial_ad]
 
         // [START create_interstitial_ad_listener]
-        mInterstitialAd.setAdListener(new AdListener() {
+        /*mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
                 requestNewInterstitial();
@@ -142,19 +154,24 @@ public abstract class PostListFragment extends BaseFragment {
                 // See https://goo.gl/sCZj0H for possible error codes.
                 Log.w(TAG, "onAdFailedToLoad:" + i);
             }
-        });
+        });*/
+    }
+
+    private void collectUsers(Map<String, Object> users) {
+        //iterate through each user, ignoring their UID
+        usersMap = (Map<String, Object>) users;
     }
 
     /**
      * Load a new interstitial ad asynchronously.
      */
     // [START request_new_interstitial]
-    private void requestNewInterstitial() {
+    /*private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
                 .build();
 
         mInterstitialAd.loadAd(adRequest);
-    }
+    }*/
     // [END request_new_interstitial]
 
 
@@ -253,7 +270,7 @@ public abstract class PostListFragment extends BaseFragment {
                     public void onClick(View starView) {
                         onClickStar(starView, postRef, model);
                     }
-                },new View.OnClickListener(){
+                }, new View.OnClickListener() {
                     public void onClick(View deleteView) {
                         // Need to write to both places the post is stored
 
@@ -263,11 +280,11 @@ public abstract class PostListFragment extends BaseFragment {
                     public void onClick(View moreView) {
                         onClickMore(moreView, postRef, model);
                     }
-                },  new View.OnClickListener() {
-                            @Override
-                            public void onClick(View content) {
-                                onClickContent(postKey, false);
-                            }
+                }, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View content) {
+                        onClickContent(postKey, false);
+                    }
                 }, new View.OnClickListener() {
                     @Override
                     public void onClick(View commentView) {
@@ -289,13 +306,21 @@ public abstract class PostListFragment extends BaseFragment {
                             AppUtil.putString(activity, AppConstants.PREF_USER_POST_QUERY, model.uid);
                             userAllPostIntent = new Intent(activity, UserAllPostActivity.class);
                             userAllPostIntent.putExtra(AppConstants.EXTRA_DISPLAY_NAME, model.author);
-
-                            if (mInterstitialAd.isLoaded()) {
+                            startActivityUserAllPost();
+                            /*if (mInterstitialAd.isLoaded()) {
                                 mInterstitialAd.show();
                             } else
-                                startActivityUserAllPost();
-                        } else
-                            return;
+                                */
+                            //startActivityUserAllPost();
+                        /*} else
+                            return;*/
+                        }
+                    }
+                }, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View startCountView) {
+                        collectLikeUsers(model);
+                        // Adding items to listview
                     }
                 });
 
@@ -310,22 +335,29 @@ public abstract class PostListFragment extends BaseFragment {
             }
         };
 
-        //come here
-        //https://stackoverflow.com/questions/35506347/loading-view-before-data-is-loaded-into-recycler-view
-        //https://firebase.google.com/docs/database/android/offline-capabilities
-
-/*
-        mRecycler.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                //mProgressBar.setVisibility(View.GONE);
-
-            }
-
-        });
-*/
 
         mRecycler.setAdapter(mAdapter);
+    }
+
+    private void collectLikeUsers(Post post) {
+        usersList = new ArrayList<>();
+        if (usersMap != null) {
+            for (String key : post.stars.keySet()) {
+                if (usersMap.keySet().contains(key)) {
+                    Map userMapValue = (Map) usersMap.get(key);
+                    User user = new User();
+                    user.displayName = (String) userMapValue.get("displayName");
+                    user.photoUrl = (String) userMapValue.get("photoUrl");
+                    usersList.add(user);
+                }
+            }
+            if (usersList.size() > 0) {
+                Intent likesListIntent = new Intent(activity, LikesListUsersActivity.class);
+                likesListIntent.putExtra(AppConstants.LIKES_LIST, (Serializable) usersList);
+                startActivity(likesListIntent);
+            }
+        }
+
     }
 
     private void startActivityUserAllPost() {
@@ -552,9 +584,9 @@ public abstract class PostListFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!mInterstitialAd.isLoaded()) {
+        /*if (!mInterstitialAd.isLoaded()) {
             requestNewInterstitial();
-        }
+        }*/
     }
 
     // [START post_stars_transaction]
@@ -612,7 +644,5 @@ public abstract class PostListFragment extends BaseFragment {
     }
 
     public abstract Query getQuery(DatabaseReference databaseReference);
-
-
 
 }

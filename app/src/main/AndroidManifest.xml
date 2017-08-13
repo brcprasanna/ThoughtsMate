@@ -44,6 +44,12 @@
 
         <activity android:name=".activity.AppIntroActivity"
             android:theme="@style/Theme.Design.Light.NoActionBar"/>
+
+        <activity
+            android:name=".activity.LikesListUsersActivity"
+            android:theme="@style/Theme.Design.Light.NoActionBar" />
+
+
         <activity android:name=".activity.NewPostActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden">

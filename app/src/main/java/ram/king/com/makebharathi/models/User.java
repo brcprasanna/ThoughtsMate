@@ -1,12 +1,12 @@
 package ram.king.com.makebharathi.models;
 
-import android.net.Uri;
-
 import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.io.Serializable;
 
 // [START blog_user_class]
 @IgnoreExtraProperties
-public class User {
+public class User implements Serializable {
 
     public String username;
     public String email;

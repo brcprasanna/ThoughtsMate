@@ -50,6 +50,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         starView = (ImageView) itemView.findViewById(R.id.button_star);
         deleteView = (ImageView) itemView.findViewById(R.id.delete);
         numStarsView = (TextView) itemView.findViewById(R.id.star_count);
+        //numStarsView.setPaintFlags(numStarsView.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
         bodyView = (TextView) itemView.findViewById(R.id.post_body);
         dedicatedTo = (TextView) itemView.findViewById(R.id.post_dedicated_to);
         courtesy = (TextView) itemView.findViewById(R.id.post_courtesy);
@@ -65,7 +66,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     public void bindToPost(Post post, View.OnClickListener starClickListener,
                            View.OnClickListener deleteClickListener, View.OnClickListener moreClickListener, View.OnClickListener contentListener,
-                           View.OnClickListener commentListener, View.OnClickListener shareListener, View.OnClickListener topUserLayoutListener) {
+                           View.OnClickListener commentListener, View.OnClickListener shareListener, View.OnClickListener topUserLayoutListener, View.OnClickListener numStarsViewListener) {
         if (!TextUtils.isEmpty(post.title)) {
             titleView.setVisibility(View.VISIBLE);
             titleView.setText("Title : " + post.title);
@@ -108,5 +109,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         commentView.setOnClickListener(commentListener);
         share.setOnClickListener(shareListener);
         topUserLayout.setOnClickListener(topUserLayoutListener);
+        numStarsView.setOnClickListener(numStarsViewListener);
     }
 }
