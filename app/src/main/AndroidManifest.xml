@@ -109,6 +109,12 @@
             android:value="dae2e4b0b7ef3e71878b4e6cd1d8aa40b7641eca"
 
             />
+        <!-- Declare this activity in your AndroidManfest.xml -->
+        <activity
+            android:name="com.etiennelawlor.imagegallery.library.activities.ImageGalleryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label=""
+            android:theme="@style/Theme.ImageGallery" />
 
     </application>
 

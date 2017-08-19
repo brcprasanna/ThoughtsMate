@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
@@ -41,6 +42,11 @@ import com.google.firebase.storage.UploadTask;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -74,6 +80,7 @@ public class NewPostActivity extends BaseActivity {
     ArrayAdapter<User> usersListAdapterForCourtesy;
     // ArrayList for Listview
     ArrayList<User> usersList = new ArrayList<>();
+    View parentLayout;
     // [START declare_database_ref]
     private DatabaseReference mDatabase;
     private TextInputEditText mTitleField;
@@ -91,6 +98,7 @@ public class NewPostActivity extends BaseActivity {
     private TextInputEditText mSetImageField;
     private ImageButton mAttachment;
     private String selectedPath = "";
+    private String imagePath;
 
     /**
      * Checks if the app has permission to write to device storage
@@ -145,6 +153,7 @@ public class NewPostActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
 
+        parentLayout = findViewById(R.id.parentLayout);
         // Get intent, action and MIME type
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -331,10 +340,15 @@ public class NewPostActivity extends BaseActivity {
 
     public void openGalleryImage() {
 
-        Intent intent = new Intent();
+        //Intent intent = new Intent();
+        Intent intent =
+                new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Image "), SELECT_IMAGE);
+        //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        // intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, SELECT_IMAGE);
+
     }
 
     public String getPath(Uri uri) {
@@ -447,7 +461,7 @@ public class NewPostActivity extends BaseActivity {
         final String title = mTitleField.getText().toString().trim();
         final String dedicatedTo = mDedicatedToField.getText().toString().trim();
         final String courtesy = mCourtesyField.getText().toString().trim();
-        final String image = mSetImageField.getText().toString().trim();
+        final String image = imagePath;
 
         // Title is required
         if (TextUtils.isEmpty(title)) {
@@ -496,7 +510,7 @@ public class NewPostActivity extends BaseActivity {
                 System.out.println("SELECT_IMAGE");
                 Uri selectedImageUri = data.getData();
                 //selectedImageUri.getPath();
-                selectedPath = getRealPathFromDocumentUri(NewPostActivity.this, selectedImageUri);
+                selectedPath = getImagePathFromInputStreamUri(selectedImageUri);
                 System.out.println("SELECT_IMAGE Path : " + selectedPath);
                 doFileUpload(selectedPath);
             }
@@ -518,7 +532,8 @@ public class NewPostActivity extends BaseActivity {
         }
     }
 
-    private void doFileUpload(String selectedPath) {
+    private void doFileUpload(final String selectedPath) {
+        showProgressDialog();
         final FirebaseStorage storageRef = FirebaseStorage.getInstance();
         Uri file = Uri.fromFile(new File(selectedPath));
         //StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
@@ -529,15 +544,84 @@ public class NewPostActivity extends BaseActivity {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+                hideProgressDialog();
+                imagePath = "";
+                mSetImageField.setText("");
+
+                showSnackbar("Please add a valid Image");
                 // Handle unsuccessful uploads
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                hideProgressDialog();
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                mSetImageField.setText(downloadUrl.toString());
+                imagePath = downloadUrl.toString();
+                mSetImageField.setText(selectedPath);
+                showSnackbar("Image added successfully");
             }
         });
+    }
+
+    public String getImagePathFromInputStreamUri(Uri uri) {
+        InputStream inputStream = null;
+        String filePath = null;
+
+        if (uri.getAuthority() != null) {
+            try {
+                inputStream = getContentResolver().openInputStream(uri); // context needed
+                File photoFile = createTemporalFileFrom(inputStream);
+
+                filePath = photoFile.getPath();
+
+            } catch (FileNotFoundException e) {
+                // log
+            } catch (IOException e) {
+                // log
+            } finally {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return filePath;
+    }
+
+    private File createTemporalFileFrom(InputStream inputStream) throws IOException {
+        File targetFile = null;
+
+        if (inputStream != null) {
+            int read;
+            byte[] buffer = new byte[8 * 1024];
+
+            targetFile = createTemporalFile();
+            OutputStream outputStream = new FileOutputStream(targetFile);
+
+            while ((read = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, read);
+            }
+            outputStream.flush();
+
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return targetFile;
+    }
+
+    private File createTemporalFile() {
+        return new File(getExternalCacheDir(), "tempFile" + getUid() + System.currentTimeMillis() + ".jpg"); // context needed
+    }
+
+    private void showSnackbar(String message) {
+        //noinspection ConstantConditions
+        Snackbar.make(parentLayout, message, Snackbar.LENGTH_LONG).show();
     }
 }
