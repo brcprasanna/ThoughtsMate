@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/real_banner_ad_unit_id" />
+        ads:adUnitId="@string/banner_ad_unit_id" />
 
 
     <android.support.v4.widget.NestedScrollView

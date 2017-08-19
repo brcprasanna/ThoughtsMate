@@ -21,6 +21,7 @@ public class Post {
     public String dedicatedTo;
     public String courtesy;
     public String language;
+    public String image;
     public Object timestamp;
 
 
@@ -28,7 +29,7 @@ public class Post {
         // Default constructor required for calls to DataSnapshot.getValue(Post.class)
     }
 
-    public Post(String uid, String author, String title, String body, String photoUrl, String dedicatedTo, String courtesy, String langauge) {
+    public Post(String uid, String author, String title, String body, String photoUrl, String dedicatedTo, String courtesy, String language, String image) {
         this.uid = uid;
         this.author = author;
         this.title = title;
@@ -36,7 +37,8 @@ public class Post {
         this.photoUrl = photoUrl;
         this.dedicatedTo = dedicatedTo;
         this.courtesy = courtesy;
-        this.language = langauge;
+        this.language = language;
+        this.image = image;
         HashMap<String, Object> timestampNow = new HashMap<>();
         timestampNow.put("timestamp", ServerValue.TIMESTAMP);
         this.timestamp = ServerValue.TIMESTAMP;
@@ -56,8 +58,9 @@ public class Post {
         result.put("photoUrl",photoUrl);
         result.put("dedicatedTo", dedicatedTo);
         result.put("courtesy", courtesy);
-        result.put("language",language);
-        result.put("timestamp",timestamp);
+        result.put("language", language);
+        result.put("image", image);
+        result.put("timestamp", timestamp);
         return result;
     }
 

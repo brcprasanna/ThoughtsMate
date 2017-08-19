@@ -5,153 +5,189 @@
     android:layout_height="match_parent"
     tools:context="ram.king.com.makebharathi.activity.NewPostActivity">
 
-   <!--
-        <ListView android:id="@android:id/list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"/>
-    -->
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-                                    >
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/textLayoutTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp">
-
-    <android.support.design.widget.TextInputEditText
-        android:id="@+id/field_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Title (Optional)"
-        android:maxLines="3"
-        android:overScrollMode="always"
-        android:scrollbarStyle="insideInset"
-        android:scrollbars="vertical"
-        android:singleLine="false" />
-    </android.support.design.widget.TextInputLayout>
-
-    <!--<LinearLayout
-        android:id="@+id/button_layout"
+    <!--
+         <ListView android:id="@android:id/list"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"/>
+     -->
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textLayoutTitle"
-        android:layout_marginLeft="16dp"
-        android:orientation="horizontal">
-    <Button
-        android:id="@+id/button_dedication"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="wrap_content">
 
-        android:text="@string/plus_dedication"
-        />
-
-    <Button
-        android:id="@+id/button_courtesy"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/plus_courtesy" />
-
-    </LinearLayout>
--->
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/textLayoutDedicateTo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textLayoutTitle"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:visibility="visible">
-
-
-    <android.support.design.widget.TextInputEditText
-        android:id="@+id/field_dedicated_to"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Dedicated to (Optional)"
-        android:maxLines="2"
-        android:overScrollMode="always"
-        android:scrollbarStyle="insideInset"
-        android:scrollbars="vertical"
-        />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <!-- List View -->
-    <ListView
-        android:id="@+id/users_list_view_dedication"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textLayoutDedicateTo"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:visibility="gone"/>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/textLayoutCourtesy"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textLayoutDedicateTo"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:visibility="visible">
-
-    <android.support.design.widget.TextInputEditText
-        android:id="@+id/field_courtesy"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Courtesy (Optional)"
-        android:maxLines="2"
-        android:overScrollMode="always"
-        android:scrollbarStyle="insideInset"
-        android:scrollbars="vertical"
-         />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <ListView
-        android:id="@+id/users_list_view_courtesy"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textLayoutCourtesy"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:visibility="gone"/>
-
-    <!--<android.support.design.widget.TextInputLayout
-        android:id="@+id/textLayoutCompose"
-        android:layout_below="@id/textLayoutCourtesy"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/field_compose"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textLayoutTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="6"
-            android:singleLine="false"
-            android:hint="Compose" />
-    </android.support.design.widget.TextInputLayout>
--->
-</RelativeLayout>
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/field_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Title (Optional)"
+                android:maxLines="3"
+                android:overScrollMode="always"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical"
+                android:singleLine="false" />
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/textLayoutSetImageLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textLayoutTitle"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+
+            android:weightSum="1">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textLayoutSetImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/field_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Image (Optional)"
+                    android:maxLines="3"
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+                    android:singleLine="false" />
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageButton
+                android:id="@+id/btnAttach"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:src="@drawable/ic_attachment_black_24dp" />
+        </LinearLayout>
+        <!--<LinearLayout
+            android:id="@+id/button_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textLayoutTitle"
+            android:layout_marginLeft="16dp"
+            android:orientation="horizontal">
+        <Button
+            android:id="@+id/button_dedication"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="16dp"
+
+            android:text="@string/plus_dedication"
+            />
+
+        <Button
+            android:id="@+id/button_courtesy"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/plus_courtesy" />
+
+        </LinearLayout>
+    -->
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textLayoutDedicateTo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textLayoutSetImageLayout"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:visibility="visible">
+
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/field_dedicated_to"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Dedicated to (Optional)"
+                android:maxLines="2"
+                android:overScrollMode="always"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- List View -->
+        <ListView
+            android:id="@+id/users_list_view_dedication"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textLayoutDedicateTo"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:visibility="gone" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textLayoutCourtesy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textLayoutDedicateTo"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:visibility="visible">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/field_courtesy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Courtesy (Optional)"
+                android:maxLines="2"
+                android:overScrollMode="always"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ListView
+            android:id="@+id/users_list_view_courtesy"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textLayoutCourtesy"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:visibility="gone" />
+
+        <!--<android.support.design.widget.TextInputLayout
+            android:id="@+id/textLayoutCompose"
+            android:layout_below="@id/textLayoutCourtesy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/field_compose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="6"
+                android:singleLine="false"
+                android:hint="Compose" />
+        </android.support.design.widget.TextInputLayout>
+    -->
+    </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>
