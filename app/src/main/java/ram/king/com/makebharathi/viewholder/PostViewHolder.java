@@ -1,5 +1,6 @@
 package ram.king.com.makebharathi.viewholder;
 
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
@@ -38,6 +39,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public LinearLayout content;
     public TextView commentCountView;
     public RelativeLayout topUserLayout;
+    public ImageView image;
     PrettyTime p;
 
 
@@ -61,6 +63,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         commentCountView = (TextView) itemView.findViewById(R.id.comment_count);
         topUserLayout = (RelativeLayout) itemView.findViewById(R.id.post_author_layout);
         p = new PrettyTime();
+        image = (ImageView) itemView.findViewById(R.id.post_image);
 
     }
 
@@ -72,6 +75,13 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             titleView.setText("Title : " + post.title);
         } else {
             titleView.setVisibility(View.GONE);
+        }
+
+        if (!TextUtils.isEmpty(post.image)) {
+            image.setVisibility(View.VISIBLE);
+            image.setImageURI(Uri.parse(post.image));
+        } else {
+            image.setVisibility(View.GONE);
         }
 
         authorView.setText(post.author);

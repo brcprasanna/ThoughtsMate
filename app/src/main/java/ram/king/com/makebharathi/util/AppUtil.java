@@ -2,11 +2,14 @@ package ram.king.com.makebharathi.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -14,6 +17,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+
+import java.io.File;
 
 import ram.king.com.makebharathi.R;
 import ram.king.com.makebharathi.activity.PostDetailActivity;
@@ -101,6 +106,50 @@ public class AppUtil {
                         Log.w("prasanna", "getDynamicLink:onFailure", e);
                     }
                 });
+    }
+
+    public static void deleteTempFolder(Context context) {
+        ContextWrapper cw = new ContextWrapper(context);
+        if (cw != null) {
+            File directory = cw.getDir(context.getResources().getString(R.string.app_name).toString(), Context.MODE_PRIVATE);
+            //if (directory != null) {
+            //    File root = new File(directory, AppConstants.CLAIM_IMAGE_FOLDER);
+            deleteDir(context, directory);
+        }
+    }
+
+
+    public static boolean deleteDir(Context context, File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            if (children != null) {
+                for (int i = 0; i < children.length; i++) {
+                    boolean success = deleteDir(context, new File(dir, children[i]));
+                    if (!success) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if (dir != null && dir.delete()) {
+            refreshGallery(context, dir);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private static void refreshGallery(Context context, File outputFile) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri contentUri = Uri.fromFile(outputFile);
+            scanIntent.setData(contentUri);
+            context.sendBroadcast(scanIntent);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory()));
+            context.sendBroadcast(intent);
+        }
     }
 
 }

@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,6 +81,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     private TextView mDateView;
     private TextView mDedicatedToView;
     private TextView mCourtesyView;
+    private ImageView mImage;
     private TextInputEditText mCommentField;
     private Button mCommentButton;
     private RecyclerView mCommentsRecycler;
@@ -132,8 +134,10 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         mCommentButton = (Button) findViewById(R.id.button_post_comment);
         mCommentsRecycler = (RecyclerView) findViewById(R.id.recycler_comments);
 
+        mImage = (ImageView) findViewById(R.id.post_detail_image);
         mCommentButton.setOnClickListener(this);
         mCommentsRecycler.setLayoutManager(new LinearLayoutManager(this));
+
 
         prettyTime = new PrettyTime();
 
@@ -254,6 +258,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                             .into(mAuthorPhoto);
 
                     mAuthorView.setText(post.author);
+                    mTitleView.setText("Title : " + post.title);
 
                     if (!TextUtils.isEmpty(post.title)) {
                         mTitleView.setVisibility(View.VISIBLE);
@@ -275,10 +280,20 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                         mCourtesyView.setVisibility(View.GONE);
                     }
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                        mBodyView.setText(Html.fromHtml(post.body, Html.FROM_HTML_MODE_COMPACT), TextView.BufferType.SPANNABLE);
-                    else
-                        mBodyView.setText(Html.fromHtml(post.body), TextView.BufferType.SPANNABLE);
+                    if (!TextUtils.isEmpty(post.image)) {
+                        mImage.setVisibility(View.VISIBLE);
+                        Glide.with(PostDetailActivity.this)
+                                .load(post.image)
+                                .into(mImage);
+                        mImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                    }
+
+                    if (!TextUtils.isEmpty(post.body)) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                            mBodyView.setText(Html.fromHtml(post.body, Html.FROM_HTML_MODE_COMPACT), TextView.BufferType.SPANNABLE);
+                        else
+                            mBodyView.setText(Html.fromHtml(post.body), TextView.BufferType.SPANNABLE);
+                    }
 
                     long yourmilliseconds = (long) post.timestamp;
                     if (prettyTime != null)

@@ -63,7 +63,7 @@ public class TextEditorActivity extends Activity {
         mDedicatedTo = getIntent().getExtras().get("dedicated_to").toString();
         mCourtesy = getIntent().getExtras().get("courtesy").toString();
         mBackupComposeText = getIntent().getExtras().get("ComposeText").toString();
-        mImage = getIntent().getExtras().get("audio").toString();
+        mImage = getIntent().getExtras().get("image").toString();
 
         getActionBar().setTitle("Compose");
 
@@ -322,7 +322,7 @@ public class TextEditorActivity extends Activity {
     private void submitPost() {
         final String mBody = knife.toHtml();
 
-        if (TextUtils.isEmpty(mBody))
+        if (TextUtils.isEmpty(mImage) && TextUtils.isEmpty(mBody))
             return;
         // [START single_value_read]
         final String userId = getUid();
@@ -343,6 +343,7 @@ public class TextEditorActivity extends Activity {
                         } else {
                             // Write new post
                             writeNewPost(userId, user.displayName, mTitle, mBody, user.photoUrl, mDedicatedTo, mCourtesy, mImage);
+                            AppUtil.deleteTempFolder(TextEditorActivity.this);
                         }
                         setResult(RESULT_OK);
                         EventBus.getDefault().post(new MessageEvent("refresh"));

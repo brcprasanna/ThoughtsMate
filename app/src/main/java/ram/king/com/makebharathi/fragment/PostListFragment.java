@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
@@ -233,6 +234,12 @@ public abstract class PostListFragment extends BaseFragment {
                         .with(activity)
                         .load(model.photoUrl)
                         .into(viewHolder.authorPhoto);
+
+                Glide.with(activity)
+                        .load(model.image)
+                        .into(viewHolder.image);
+
+                viewHolder.image.setScaleType(ImageView.ScaleType.FIT_XY);
 
                 //getting count of comments
 

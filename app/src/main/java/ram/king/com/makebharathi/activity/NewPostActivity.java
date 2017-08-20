@@ -4,12 +4,17 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -25,6 +30,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
@@ -60,6 +66,7 @@ import ram.king.com.makebharathi.models.User;
 import ram.king.com.makebharathi.util.AppConstants;
 import ram.king.com.makebharathi.util.AppUtil;
 import ram.king.com.makebharathi.util.MessageEvent;
+import ram.king.com.makebharathi.util.ScalingUtilities;
 
 
 public class NewPostActivity extends BaseActivity {
@@ -95,10 +102,10 @@ public class NewPostActivity extends BaseActivity {
     private Button mCourtesyButton;
 */
     private String mBackupComposeText;
-    private TextInputEditText mSetImageField;
     private ImageButton mAttachment;
     private String selectedPath = "";
     private String imagePath;
+    private ImageView attachedImage;
 
     /**
      * Checks if the app has permission to write to device storage
@@ -171,6 +178,8 @@ public class NewPostActivity extends BaseActivity {
         lvUsersForDedication = (ListView) findViewById(R.id.users_list_view_dedication);
         lvUsersForCourtesy = (ListView) findViewById(R.id.users_list_view_courtesy);
 
+        attachedImage = (ImageView) findViewById(R.id.attachedImage);
+
         lvUsersForDedication.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -203,8 +212,6 @@ public class NewPostActivity extends BaseActivity {
 
         mDedicationTextLayout = (TextInputLayout) findViewById(R.id.textLayoutDedicateTo);
         mCourtesyTextLayout = (TextInputLayout) findViewById(R.id.textLayoutCourtesy);
-
-        mSetImageField = (TextInputEditText) findViewById(R.id.field_image);
 
         mAttachment = (ImageButton) findViewById(R.id.btnAttach);
         mAttachment.setOnClickListener(new View.OnClickListener() {
@@ -470,13 +477,6 @@ public class NewPostActivity extends BaseActivity {
             mTitleField.setText("");
         }
 
-        // Title is required
-        if (TextUtils.isEmpty(image)) {
-            //mTitleField.setError(REQUIRED);
-            //return;
-            mSetImageField.setText("");
-        }
-
         if (TextUtils.isEmpty(dedicatedTo)) {
             mDedicatedToField.setText("");
         }
@@ -535,7 +535,7 @@ public class NewPostActivity extends BaseActivity {
     private void doFileUpload(final String selectedPath) {
         showProgressDialog();
         final FirebaseStorage storageRef = FirebaseStorage.getInstance();
-        Uri file = Uri.fromFile(new File(selectedPath));
+        final Uri file = Uri.fromFile(new File(selectedPath));
         //StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
         StorageReference riversRef = storageRef.getReference(file.toString());
         UploadTask uploadTask = riversRef.putFile(file);
@@ -546,8 +546,7 @@ public class NewPostActivity extends BaseActivity {
             public void onFailure(@NonNull Exception exception) {
                 hideProgressDialog();
                 imagePath = "";
-                mSetImageField.setText("");
-
+                attachedImage.setVisibility(View.GONE);
                 showSnackbar("Please add a valid Image");
                 // Handle unsuccessful uploads
             }
@@ -558,8 +557,13 @@ public class NewPostActivity extends BaseActivity {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                 imagePath = downloadUrl.toString();
-                mSetImageField.setText(selectedPath);
                 showSnackbar("Image added successfully");
+                final int THUMBSIZE = 64;
+                Bitmap thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imagePath),
+                        THUMBSIZE, THUMBSIZE);
+                attachedImage.setImageURI(file);
+                attachedImage.setVisibility(View.VISIBLE);
+                //AppUtil.deleteTempFolder(NewPostActivity.this);
             }
         });
     }
@@ -575,10 +579,12 @@ public class NewPostActivity extends BaseActivity {
 
                 filePath = photoFile.getPath();
 
+                filePath = decodeFile(filePath, 520, 480);
+
             } catch (FileNotFoundException e) {
-                // log
+                e.printStackTrace();
             } catch (IOException e) {
-                // log
+                e.printStackTrace();
             } finally {
                 try {
                     inputStream.close();
@@ -617,9 +623,67 @@ public class NewPostActivity extends BaseActivity {
     }
 
     private File createTemporalFile() {
-        return new File(getExternalCacheDir(), "tempFile" + getUid() + System.currentTimeMillis() + ".jpg"); // context needed
+        return new File(getExternalCacheDir(), "tempFile" + ".jpg"); // context needed
     }
 
+
+    private String decodeFile(String path, int DESIREDWIDTH, int DESIREDHEIGHT) {
+        String strMyImagePath = null;
+        Bitmap scaledBitmap = null;
+
+        try {
+            // Part 1: Decode image
+            Bitmap unscaledBitmap = ScalingUtilities.decodeFile(path, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
+
+            if (!(unscaledBitmap.getWidth() <= DESIREDWIDTH && unscaledBitmap.getHeight() <= DESIREDHEIGHT)) {
+                // Part 2: Scale image
+                scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
+            } else {
+                unscaledBitmap.recycle();
+                return path;
+            }
+
+            // Store to tmp file
+
+            String extr = Environment.getExternalStorageDirectory().toString();
+            //File mFolder = new File(extr + "/"+getResources().getString(R.string.app_name));
+            ContextWrapper cw = new ContextWrapper(getApplicationContext());
+            File directory = cw.getDir(getResources().getString(R.string.app_name).toString(), Context.MODE_PRIVATE);
+            //File root = new File(directory,getResources().getString(R.string.app_name));
+
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+
+            String s = "temp" + getUid() + System.currentTimeMillis() + ".png";
+
+            File f = new File(directory.getAbsolutePath(), s);
+
+            strMyImagePath = f.getAbsolutePath();
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(f);
+                scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 75, fos);
+                fos.flush();
+                fos.close();
+            } catch (FileNotFoundException e) {
+
+                e.printStackTrace();
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+
+            scaledBitmap.recycle();
+        } catch (Throwable e) {
+        }
+
+        if (strMyImagePath == null) {
+            return path;
+        }
+        return strMyImagePath;
+
+    }
     private void showSnackbar(String message) {
         //noinspection ConstantConditions
         Snackbar.make(parentLayout, message, Snackbar.LENGTH_LONG).show();
