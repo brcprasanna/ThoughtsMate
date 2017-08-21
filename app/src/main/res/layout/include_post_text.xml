@@ -26,7 +26,7 @@
         android:ellipsize="end"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:textStyle="italic|bold"
+        android:textStyle="italic"
         tools:text="Dedicated To" />
 
 
@@ -39,7 +39,7 @@
         android:ellipsize="end"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:textStyle="italic|bold"
+        android:textStyle="italic"
 
         tools:text="Courtesy" />
 

@@ -27,7 +27,7 @@
         android:ellipsize="end"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:textStyle="italic|bold"
+        android:textStyle="italic"
         tools:text="Dedicated To" />
 
 
@@ -40,11 +40,11 @@
         android:ellipsize="end"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:textStyle="italic|bold"
+        android:textStyle="italic"
 
         tools:text="Courtesy" />
 
-    <ImageView
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/post_detail_image"
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="match_parent"

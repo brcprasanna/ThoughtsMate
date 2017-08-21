@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -81,7 +82,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     private TextView mDateView;
     private TextView mDedicatedToView;
     private TextView mCourtesyView;
-    private ImageView mImage;
+    private PhotoView mImage;
     private TextInputEditText mCommentField;
     private Button mCommentButton;
     private RecyclerView mCommentsRecycler;
@@ -134,7 +135,8 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         mCommentButton = (Button) findViewById(R.id.button_post_comment);
         mCommentsRecycler = (RecyclerView) findViewById(R.id.recycler_comments);
 
-        mImage = (ImageView) findViewById(R.id.post_detail_image);
+        mImage = (PhotoView) findViewById(R.id.post_detail_image);
+
         mCommentButton.setOnClickListener(this);
         mCommentsRecycler.setLayoutManager(new LinearLayoutManager(this));
 

@@ -104,7 +104,7 @@ public class NewPostActivity extends BaseActivity {
     private String mBackupComposeText;
     private ImageButton mAttachment;
     private String selectedPath = "";
-    private String imagePath;
+    private String imagePath = "";
     private ImageView attachedImage;
 
     /**
@@ -468,13 +468,17 @@ public class NewPostActivity extends BaseActivity {
         final String title = mTitleField.getText().toString().trim();
         final String dedicatedTo = mDedicatedToField.getText().toString().trim();
         final String courtesy = mCourtesyField.getText().toString().trim();
-        final String image = imagePath;
+        //final String image = imagePath;
 
         // Title is required
         if (TextUtils.isEmpty(title)) {
             //mTitleField.setError(REQUIRED);
             //return;
             mTitleField.setText("");
+        }
+
+        if (TextUtils.isEmpty(imagePath)) {
+            imagePath = "";
         }
 
         if (TextUtils.isEmpty(dedicatedTo)) {
@@ -498,7 +502,7 @@ public class NewPostActivity extends BaseActivity {
         intent.putExtra("dedicated_to", dedicatedTo);
         intent.putExtra("courtesy", courtesy);
         intent.putExtra("ComposeText", mBackupComposeText);
-        intent.putExtra("image", image);
+        intent.putExtra("image", imagePath);
 
         startActivityForResult(intent, AppConstants.SAVE_WRITE_POST);
     }

@@ -1,6 +1,6 @@
 package ram.king.com.makebharathi.viewholder;
 
-import android.net.Uri;
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.ocpsoft.prettytime.PrettyTime;
@@ -67,22 +68,30 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void bindToPost(Post post, View.OnClickListener starClickListener,
+    public void bindToPost(Activity activity, Post post, View.OnClickListener starClickListener,
                            View.OnClickListener deleteClickListener, View.OnClickListener moreClickListener, View.OnClickListener contentListener,
                            View.OnClickListener commentListener, View.OnClickListener shareListener, View.OnClickListener topUserLayoutListener, View.OnClickListener numStarsViewListener) {
         if (!TextUtils.isEmpty(post.title)) {
             titleView.setVisibility(View.VISIBLE);
-            titleView.setText("Title : " + post.title);
+            titleView.setText(post.title);
         } else {
             titleView.setVisibility(View.GONE);
         }
 
         if (!TextUtils.isEmpty(post.image)) {
             image.setVisibility(View.VISIBLE);
-            image.setImageURI(Uri.parse(post.image));
+            //image.setImageURI(Uri.parse(post.image));
+            Glide.with(activity)
+                    .load(post.image)
+                    .into(image);
+            image.setScaleType(ImageView.ScaleType.FIT_XY);
+
         } else {
-            image.setVisibility(View.GONE);
+            Glide.with(activity)
+                    .load(android.R.drawable.screen_background_light_transparent)
+                    .into(image);
         }
+
 
         authorView.setText(post.author);
 

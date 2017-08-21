@@ -53,11 +53,13 @@ import ram.king.com.makebharathi.util.MessageEvent;
 public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";
-
+    private static ViewPager mViewPager;
     private FragmentPagerAdapter mPagerAdapter;
-    private ViewPager mViewPager;
-
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
+
+    public static int getViewPagerNumber() {
+        return mViewPager.getCurrentItem();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,6 +177,11 @@ public class MainActivity extends BaseActivity {
 
     }
 
+
+    // [END get_deep_link]
+
+    // [END on_create]
+
     private void setRemoteConfigToLocal() {
         // [START get_config_values]
         String prevLimitToLast = AppUtil.getString(this, AppConstants.QUERY_LIMIT_TO_LAST, AppConstants.DEFAULT_LIMIT_TO_LAST);
@@ -198,12 +205,6 @@ public class MainActivity extends BaseActivity {
             EventBus.getDefault().post(new MessageEvent("changed"));
         }
     }
-
-
-    // [END get_deep_link]
-
-    // [END on_create]
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -263,8 +264,6 @@ public class MainActivity extends BaseActivity {
         });
         builderSingle.show();
     }
-
-
 
 
 }

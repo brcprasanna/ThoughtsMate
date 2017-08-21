@@ -119,9 +119,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/top_layout"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp" />
+        android:layout_below="@+id/top_layout" />
 
         <include
             android:id="@+id/footer_layout"
@@ -130,8 +128,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/content_layout"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp" />
+            android:layout_marginLeft="5dp" />
 
 
     </RelativeLayout>

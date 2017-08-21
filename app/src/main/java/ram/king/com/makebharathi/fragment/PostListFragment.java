@@ -1,5 +1,6 @@
 package ram.king.com.makebharathi.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,7 +19,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
@@ -182,6 +182,7 @@ public abstract class PostListFragment extends BaseFragment {
 
         mAdapter = new FirebaseRecyclerAdapter<Post, PostViewHolder>(Post.class, R.layout.item_post,
                 PostViewHolder.class, postsQuery) {
+            @SuppressLint("RestrictedApi")
             @Override
             protected void populateViewHolder(final PostViewHolder viewHolder, final Post model, final int position) {
                 final DatabaseReference postRef = getRef(position);
@@ -235,11 +236,19 @@ public abstract class PostListFragment extends BaseFragment {
                         .load(model.photoUrl)
                         .into(viewHolder.authorPhoto);
 
-                Glide.with(activity)
-                        .load(model.image)
-                        .into(viewHolder.image);
 
-                viewHolder.image.setScaleType(ImageView.ScaleType.FIT_XY);
+                /*if (!TextUtils.isEmpty(model.image)) {
+                    viewHolder.image.setVisibility(View.VISIBLE);
+                    //image.setImageURI(Uri.parse(post.image));
+                    Glide.with(activity)
+                            .load(model.image)
+                            .into(viewHolder.image);
+
+                    viewHolder.image.setScaleType(ImageView.ScaleType.FIT_XY);
+
+                } else {
+                    viewHolder.image.setVisibility(View.GONE);
+                }*/
 
                 //getting count of comments
 
@@ -272,7 +281,7 @@ public abstract class PostListFragment extends BaseFragment {
 
 
                 // Bind Post to ViewHolder, setting OnClickListener for the star button
-                viewHolder.bindToPost(model, new View.OnClickListener() {
+                viewHolder.bindToPost(activity, model, new View.OnClickListener() {
                     @Override
                     public void onClick(View starView) {
                         onClickStar(starView, postRef, model);
@@ -468,11 +477,14 @@ public abstract class PostListFragment extends BaseFragment {
         // Need to write to both places the post is stored
         DatabaseReference globalPostRef = mDatabase.child("posts").child(postRef.getKey());
         DatabaseReference userPostRef = mDatabase.child("user-posts").child(model.uid).child(postRef.getKey());
+        // DatabaseReference starPostRef = mDatabase.child("star-user-posts").child(model.uid).child(postRef.getKey());
+        // DatabaseReference starPostRef = mDatabase.child("star-user-posts").child(getUid()).child(postRef.getKey());
 
         // Run two transactions
 
         onStarClicked(globalPostRef);
         onStarClicked(userPostRef);
+        //onStarClicked(starPostRef);
 
     }
 
