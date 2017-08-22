@@ -1,6 +1,7 @@
 package ram.king.com.makebharathi.viewholder;
 
 import android.app.Activity;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
@@ -120,7 +121,14 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         } else
             numStarsView.setVisibility(View.GONE);
 
-        bodyView.setText(Html.fromHtml(post.body), TextView.BufferType.SPANNABLE);
+        if (!TextUtils.isEmpty(post.body)) {
+            bodyView.setVisibility(View.VISIBLE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                bodyView.setText(Html.fromHtml(post.body, Html.FROM_HTML_MODE_COMPACT), TextView.BufferType.SPANNABLE);
+            else
+                bodyView.setText(Html.fromHtml(post.body), TextView.BufferType.SPANNABLE);
+        } else
+            bodyView.setVisibility(View.GONE);
         starView.setOnClickListener(starClickListener);
         deleteView.setOnClickListener(deleteClickListener);
         more.setOnClickListener(moreClickListener);

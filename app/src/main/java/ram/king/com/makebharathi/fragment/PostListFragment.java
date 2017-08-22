@@ -597,7 +597,7 @@ public abstract class PostListFragment extends BaseFragment {
         }
         else if (event.getMessage().equals("refresh"))
         {
-            mManager.scrollToPositionWithOffset(mAdapter.getItemCount(), 0);
+            //  mManager.scrollToPositionWithOffset(mAdapter.getItemCount(), 0);
         }
     };
 

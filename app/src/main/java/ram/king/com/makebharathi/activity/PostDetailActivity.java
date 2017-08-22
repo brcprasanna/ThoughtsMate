@@ -291,11 +291,13 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                     }
 
                     if (!TextUtils.isEmpty(post.body)) {
+                        mBodyView.setVisibility(View.VISIBLE);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                             mBodyView.setText(Html.fromHtml(post.body, Html.FROM_HTML_MODE_COMPACT), TextView.BufferType.SPANNABLE);
                         else
                             mBodyView.setText(Html.fromHtml(post.body), TextView.BufferType.SPANNABLE);
-                    }
+                    } else
+                        mBodyView.setVisibility(View.GONE);
 
                     long yourmilliseconds = (long) post.timestamp;
                     if (prettyTime != null)
