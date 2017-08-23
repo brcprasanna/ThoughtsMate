@@ -219,7 +219,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         int i = v.getId();
         if (i == R.id.button_gmail_sign_in) {
             if (AppUtil.isInternetConnected(this)) {
-                boolean termsAgreed = AppUtil.getBoolean(this, AppConstants.TERMS_AGREED, false);
+            /*    boolean termsAgreed = AppUtil.getBoolean(this, AppConstants.TERMS_AGREED, false);
                 if (!termsAgreed) {
                     this.runOnUiThread(new Runnable() {
                         @Override
@@ -239,8 +239,9 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                         }
                     });
                 } else {
-                    gmailSignIn();
-                }
+                    */
+                gmailSignIn();
+                //   }
             } else {
                 showNoInternetConnectionDialog();
             }

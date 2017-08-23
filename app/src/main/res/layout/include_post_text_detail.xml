@@ -44,6 +44,12 @@
 
         tools:text="Courtesy" />
 
+    <TextView
+        android:id="@+id/post_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" />
+
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/post_detail_image"
         style="@style/TextAppearance.AppCompat.Medium"
@@ -52,29 +58,5 @@
         android:layout_marginBottom="5dp"
         tools:text="Courtesy" />
 
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/toggleLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/post_body"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            />
-
-        <!-- Optional parameter animation_duration: sets the duration of the expand animation -->
-
-        <!--<Button
-            android:id="@+id/button_toggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            style="@style/Widget.AppCompat.Button.Colored"/>
--->
-    </LinearLayout>
 
 </LinearLayout>

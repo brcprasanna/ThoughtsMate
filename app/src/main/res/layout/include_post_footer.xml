@@ -33,7 +33,6 @@
             android:paddingRight="12dp"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
-            android:textStyle="bold"
             tools:text="7" />
 
     </RelativeLayout>
@@ -64,7 +63,6 @@
             android:paddingLeft="12dp"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
-            android:textStyle="bold"
             tools:text="7" />
 
     </RelativeLayout>

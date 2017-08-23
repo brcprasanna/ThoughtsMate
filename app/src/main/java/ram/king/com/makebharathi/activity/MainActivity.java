@@ -61,6 +61,10 @@ public class MainActivity extends BaseActivity {
         return mViewPager.getCurrentItem();
     }
 
+    public static int getViewPagePosition() {
+        return mViewPager.getCurrentItem();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,6 +151,11 @@ public class MainActivity extends BaseActivity {
 
     }
 
+
+    // [END get_deep_link]
+
+    // [END on_create]
+
     private void fetchRemoteConfig() {
         long cacheExpiration = 3600; // 1 hour in seconds.
         // If your app is using developer mode, cacheExpiration is set to 0, so each fetch will
@@ -176,11 +185,6 @@ public class MainActivity extends BaseActivity {
         // [END fetch_config_with_callback]
 
     }
-
-
-    // [END get_deep_link]
-
-    // [END on_create]
 
     private void setRemoteConfigToLocal() {
         // [START get_config_values]
@@ -264,6 +268,5 @@ public class MainActivity extends BaseActivity {
         });
         builderSingle.show();
     }
-
 
 }

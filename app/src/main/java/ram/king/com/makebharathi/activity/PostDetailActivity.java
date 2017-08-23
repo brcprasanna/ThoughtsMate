@@ -260,11 +260,11 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                             .into(mAuthorPhoto);
 
                     mAuthorView.setText(post.author);
-                    mTitleView.setText("Title : " + post.title);
+                    mTitleView.setText(post.title);
 
                     if (!TextUtils.isEmpty(post.title)) {
                         mTitleView.setVisibility(View.VISIBLE);
-                        mTitleView.setText("Title : " + post.title);
+                        mTitleView.setText(post.title);
                     } else {
                         mTitleView.setVisibility(View.GONE);
                     }
