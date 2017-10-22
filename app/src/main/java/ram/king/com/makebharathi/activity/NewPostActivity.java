@@ -583,7 +583,7 @@ public class NewPostActivity extends BaseActivity {
 
                 filePath = photoFile.getPath();
 
-                filePath = decodeFile(filePath, 520, 480);
+                filePath = decodeFile(filePath, 500, 400);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -627,7 +627,21 @@ public class NewPostActivity extends BaseActivity {
     }
 
     private File createTemporalFile() {
-        return new File(getExternalCacheDir(), "tempFile" + ".jpg"); // context needed
+        String extr = Environment.getExternalStorageDirectory().toString();
+        //File mFolder = new File(extr + "/"+getResources().getString(R.string.app_name));
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getDir(getResources().getString(R.string.app_name).toString(), Context.MODE_PRIVATE);
+        //File root = new File(directory,getResources().getString(R.string.app_name));
+
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+
+        String s = "temp" + getUid() + System.currentTimeMillis() + ".png";
+
+        File f = new File(directory.getAbsolutePath(), s);
+
+        return f;
     }
 
 
@@ -649,11 +663,8 @@ public class NewPostActivity extends BaseActivity {
 
             // Store to tmp file
 
-            String extr = Environment.getExternalStorageDirectory().toString();
-            //File mFolder = new File(extr + "/"+getResources().getString(R.string.app_name));
             ContextWrapper cw = new ContextWrapper(getApplicationContext());
             File directory = cw.getDir(getResources().getString(R.string.app_name).toString(), Context.MODE_PRIVATE);
-            //File root = new File(directory,getResources().getString(R.string.app_name));
 
             if (!directory.exists()) {
                 directory.mkdir();

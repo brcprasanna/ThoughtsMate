@@ -1,6 +1,7 @@
 package ram.king.com.makebharathi.viewholder;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -12,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.ocpsoft.prettytime.PrettyTime;
@@ -41,7 +42,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public LinearLayout content;
     public TextView commentCountView;
     public RelativeLayout topUserLayout;
-    public ImageView image;
+    public SimpleDraweeView image;
     PrettyTime p;
 
 
@@ -65,7 +66,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         commentCountView = (TextView) itemView.findViewById(R.id.comment_count);
         topUserLayout = (RelativeLayout) itemView.findViewById(R.id.post_author_layout);
         p = new PrettyTime();
-        image = (ImageView) itemView.findViewById(R.id.post_image);
+        image = (SimpleDraweeView) itemView.findViewById(R.id.post_image);
 
     }
 
@@ -82,17 +83,24 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         if (!TextUtils.isEmpty(post.image)) {
             image.setVisibility(View.VISIBLE);
             //image.setImageURI(Uri.parse(post.image));
-            Glide.with(activity)
+            /*Glide.with(activity)
                     .load(post.image)
                     .into(image);
+            image.setScaleType(ImageView.ScaleType.FIT_XY);*/
+            //Uri imageUri = Uri.parse(post.image);
+            image.setImageURI(Uri.parse(post.image));
             image.setScaleType(ImageView.ScaleType.FIT_XY);
+            //image.setAdjustViewBounds(true);
+            //image.
 
         } else {
-            Glide.with(activity)
+            image.setVisibility(View.GONE);
+            //image.setImageResource(android.R.drawable.screen_background_light_transparent);
+            /*Glide.with(activity)
                     .load(android.R.drawable.screen_background_light_transparent)
-                    .into(image);
-        }
+                    .into(image);*/
 
+        }
 
         authorView.setText(post.author);
 

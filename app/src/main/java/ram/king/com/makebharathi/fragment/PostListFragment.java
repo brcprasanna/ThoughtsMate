@@ -97,6 +97,7 @@ public abstract class PostListFragment extends BaseFragment {
         mRecycler = (RecyclerView) rootView.findViewById(R.id.messages_list);
         mRecycler.setHasFixedSize(true);
 
+
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
         return rootView;
     }
