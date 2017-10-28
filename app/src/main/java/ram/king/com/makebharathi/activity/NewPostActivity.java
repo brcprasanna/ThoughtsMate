@@ -353,7 +353,7 @@ public class NewPostActivity extends BaseActivity {
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        // intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, SELECT_IMAGE);
 
     }
