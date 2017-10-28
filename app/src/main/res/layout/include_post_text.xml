@@ -68,7 +68,7 @@
         android:id="@+id/post_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        fresco:actualImageScaleType="centerCrop"
+        fresco:actualImageScaleType="fitXY"
         fresco:placeholderImage="@android:drawable/screen_background_light_transparent"
         fresco:viewAspectRatio="1" />
 

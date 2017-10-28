@@ -82,24 +82,9 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
         if (!TextUtils.isEmpty(post.image)) {
             image.setVisibility(View.VISIBLE);
-            //image.setImageURI(Uri.parse(post.image));
-            /*Glide.with(activity)
-                    .load(post.image)
-                    .into(image);
-            image.setScaleType(ImageView.ScaleType.FIT_XY);*/
-            //Uri imageUri = Uri.parse(post.image);
             image.setImageURI(Uri.parse(post.image));
-            image.setScaleType(ImageView.ScaleType.FIT_XY);
-            //image.setAdjustViewBounds(true);
-            //image.
-
         } else {
             image.setVisibility(View.GONE);
-            //image.setImageResource(android.R.drawable.screen_background_light_transparent);
-            /*Glide.with(activity)
-                    .load(android.R.drawable.screen_background_light_transparent)
-                    .into(image);*/
-
         }
 
         authorView.setText(post.author);

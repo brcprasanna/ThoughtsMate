@@ -20,12 +20,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.github.chrisbanes.photoview.PhotoView;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -82,7 +81,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     private TextView mDateView;
     private TextView mDedicatedToView;
     private TextView mCourtesyView;
-    private PhotoView mImage;
+    private SimpleDraweeView mImage;
     private TextInputEditText mCommentField;
     private Button mCommentButton;
     private RecyclerView mCommentsRecycler;
@@ -135,7 +134,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         mCommentButton = (Button) findViewById(R.id.button_post_comment);
         mCommentsRecycler = (RecyclerView) findViewById(R.id.recycler_comments);
 
-        mImage = (PhotoView) findViewById(R.id.post_detail_image);
+        mImage = (SimpleDraweeView) findViewById(R.id.post_detail_image);
 
         mCommentButton.setOnClickListener(this);
         mCommentsRecycler.setLayoutManager(new LinearLayoutManager(this));
@@ -284,10 +283,11 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
 
                     if (!TextUtils.isEmpty(post.image)) {
                         mImage.setVisibility(View.VISIBLE);
-                        Glide.with(PostDetailActivity.this)
+                        mImage.setImageURI(Uri.parse(post.image));
+                        /*Glide.with(PostDetailActivity.this)
                                 .load(post.image)
                                 .into(mImage);
-                        mImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                        mImage.setScaleType(ImageView.ScaleType.FIT_XY);*/
                     }
 
                     if (!TextUtils.isEmpty(post.body)) {
