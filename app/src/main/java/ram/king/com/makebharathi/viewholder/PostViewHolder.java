@@ -35,6 +35,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public ImageView commentView;
     public TextView numStarsView;
     public TextView bodyView;
+    //public TextView readMoreView;
     public TextView dedicatedTo;
     public TextView courtesy;
     public ImageView share;
@@ -57,6 +58,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         numStarsView = (TextView) itemView.findViewById(R.id.star_count);
         //numStarsView.setPaintFlags(numStarsView.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
         bodyView = (TextView) itemView.findViewById(R.id.post_body);
+        //readMoreView = (TextView) itemView.findViewById(R.id.read_more);
         dedicatedTo = (TextView) itemView.findViewById(R.id.post_dedicated_to);
         courtesy = (TextView) itemView.findViewById(R.id.post_courtesy);
         commentView = (ImageView) itemView.findViewById(R.id.button_comment);
@@ -120,6 +122,12 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 bodyView.setText(Html.fromHtml(post.body, Html.FROM_HTML_MODE_COMPACT), TextView.BufferType.SPANNABLE);
             else
                 bodyView.setText(Html.fromHtml(post.body), TextView.BufferType.SPANNABLE);
+
+            /*if (bodyView.getLineCount() > 5)
+                readMoreView.setVisibility(View.VISIBLE);
+            else
+                readMoreView.setVisibility(View.GONE);
+*/
         } else
             bodyView.setVisibility(View.GONE);
         starView.setOnClickListener(starClickListener);

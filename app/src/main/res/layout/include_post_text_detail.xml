@@ -47,8 +47,10 @@
 
     <TextView
         android:id="@+id/post_body"
+        style="@style/TextAppearance.AppCompat.Headline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:textSize="16sp" />
 
     <!--

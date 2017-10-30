@@ -48,9 +48,10 @@
 
         <TextView
             android:id="@+id/post_body"
-            style="@style/TextAppearance.AppCompat.Medium"
+            style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:ellipsize="end"
             android:maxLines="8"
             android:textSize="16sp" />
@@ -64,6 +65,7 @@
             android:visibility="gone"
             style="@style/Widget.AppCompat.Button.Colored"/>
 -->
+
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/post_image"
         android:layout_width="match_parent"
