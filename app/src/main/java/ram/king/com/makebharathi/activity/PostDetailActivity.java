@@ -288,6 +288,8 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                                 .load(post.image)
                                 .into(mImage);
                         mImage.setScaleType(ImageView.ScaleType.FIT_XY);*/
+                    } else {
+                        mImage.setVisibility(View.GONE);
                     }
 
                     if (!TextUtils.isEmpty(post.body)) {
