@@ -13,8 +13,8 @@ android {
         applicationId "ram.king.com.makebharathi"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 10
-        versionName "2.0"
+        versionCode 16
+        versionName "2.0.6"
 
     }
     buildTypes {
