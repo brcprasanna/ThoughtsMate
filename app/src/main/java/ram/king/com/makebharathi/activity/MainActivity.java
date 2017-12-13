@@ -31,7 +31,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -76,7 +75,7 @@ public class MainActivity extends BaseActivity {
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name) + " " + "(" + prefLanguage + ")");
 
         //initialize fresco
-        Fresco.initialize(this);
+        //Fresco.initialize(this);
 
         // Get Remote Config instance.
         // [START get_remote_config_instance]

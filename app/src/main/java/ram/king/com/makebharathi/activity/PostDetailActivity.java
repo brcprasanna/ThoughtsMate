@@ -93,6 +93,8 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //initialize fresco
+        //Fresco.initialize(this);
         setContentView(R.layout.activity_post_detail);
 
         getSupportActionBar().setTitle("");

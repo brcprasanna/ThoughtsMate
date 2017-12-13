@@ -3,6 +3,7 @@ package ram.king.com.makebharathi;
 import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -21,6 +22,7 @@ public class MyApplication extends Application {
             mConditionRef = mRootRef.child("condition");
 
         Fabric.with(this, new Crashlytics());
+        Fresco.initialize(this);
     }
 
 
