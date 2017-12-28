@@ -88,6 +88,7 @@ dependencies {
 
     compile 'com.google.firebase:firebase-ads:11.0.1'
     compile 'com.google.firebase:firebase-storage:11.0.1'
+    compile 'com.google.firebase:firebase-messaging:11.0.1'
 
     compile 'com.github.lawloretienne:imagegallery:0.1.0'
     compile 'com.github.chrisbanes:PhotoView:2.1.3'

@@ -655,7 +655,7 @@ public class NewPostActivity extends BaseActivity {
 
             if (!(unscaledBitmap.getWidth() <= DESIREDWIDTH && unscaledBitmap.getHeight() <= DESIREDHEIGHT)) {
                 // Part 2: Scale image
-                scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
+                scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, unscaledBitmap.getWidth(), unscaledBitmap.getHeight(), ScalingUtilities.ScalingLogic.FIT);
             } else {
                 unscaledBitmap.recycle();
                 return path;
