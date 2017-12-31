@@ -25,8 +25,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
@@ -44,7 +42,6 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -88,7 +85,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     private DatabaseReference mDatabase;
     private Menu menu;
     private Button mViewCommentButton;
-    private AdView mAdView;
+    //private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,10 +168,10 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         // Show a dialog if meets conditions
         AppRate.showRateDialogIfMeetsConditions(this);
 
-        mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        //mAdView = (AdView) findViewById(R.id.adView);
+        //AdRequest adRequest = new AdRequest.Builder().build();
 
-        mAdView.loadAd(adRequest);
+        //mAdView.loadAd(adRequest);
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
         ref.addListenerForSingleValueEvent(
@@ -201,9 +198,9 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void onPause() {
-        if (mAdView != null) {
+        /*if (mAdView != null) {
             mAdView.pause();
-        }
+        }*/
         super.onPause();
     }
 
@@ -224,9 +221,9 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-        if (mAdView != null) {
+        /*if (mAdView != null) {
             mAdView.resume();
-        }
+        }*/
     }
 
     /**
@@ -234,9 +231,9 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
      */
     @Override
     public void onDestroy() {
-        if (mAdView != null) {
+        /*if (mAdView != null) {
             mAdView.destroy();
-        }
+        }*/
         super.onDestroy();
     }
 
@@ -456,7 +453,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
             }
             if (usersList.size() > 0) {
                 Intent likesListIntent = new Intent(this, LikesListUsersActivity.class);
-                likesListIntent.putExtra(AppConstants.LIKES_LIST, (Serializable) usersList);
+                likesListIntent.putExtra(AppConstants.LIKES_LIST, usersList);
                 startActivity(likesListIntent);
             }
         }

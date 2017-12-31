@@ -301,7 +301,10 @@ public class TextEditorActivity extends Activity {
     }
 
     public String getUid() {
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String uId = null;
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
+            uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        return uId;
     }
 
     @Override
@@ -326,6 +329,10 @@ public class TextEditorActivity extends Activity {
             return;
         // [START single_value_read]
         final String userId = getUid();
+        if (userId == null) {
+            Toast.makeText(this, "Please sign in before submit", Toast.LENGTH_LONG).show();
+            return;
+        }
         mDatabase.child("users").child(userId).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override

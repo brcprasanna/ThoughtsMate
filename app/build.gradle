@@ -13,8 +13,8 @@ android {
         applicationId "ram.king.com.makebharathi"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 17
-        versionName "2.0.7"
+        versionCode 20
+        versionName "3.0.1"
 
     }
     buildTypes {
@@ -64,7 +64,7 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
 
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
-        transitive = true;
+        transitive = true
     }
 
 //    compile 'com.fasterxml.jackson.core:jackson-core:2.7.3'
@@ -86,7 +86,7 @@ dependencies {
     compile 'com.google.firebase:firebase-config:11.0.1'
     compile 'com.github.hotchemi:android-rate:1.0.1'
 
-    compile 'com.google.firebase:firebase-ads:11.0.1'
+    //compile 'com.google.firebase:firebase-ads:11.0.1'
     compile 'com.google.firebase:firebase-storage:11.0.1'
     compile 'com.google.firebase:firebase-messaging:11.0.1'
 
